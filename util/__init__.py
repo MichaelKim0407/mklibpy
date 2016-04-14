@@ -8,6 +8,5 @@ __author__ = 'Michael'
 
 # Packages
 import args
-import interact
 import list
 import path
