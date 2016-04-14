@@ -15,3 +15,11 @@ class ValueSetLengthError(Exception):
     def __str__(self):
         return "The length of values ({}) is not equal to the length of keys ({})".format(len(self.values),
                                                                                           len(self.keys))
+
+
+class InvalidExecutionArgumentError(Exception):
+    def __init__(self, arg):
+        self.arg = arg
+
+    def __str__(self):
+        return "Invalid option: {}".format(self.arg)

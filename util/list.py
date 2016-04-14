@@ -4,7 +4,7 @@ list.py create by Michael for mklibpy package.
 Utility for collections.
 """
 
-import mklibpy.error
+import mklibpy.error as error
 
 __author__ = 'Michael'
 
@@ -17,7 +17,7 @@ Combine a list of keys and a list of values into a dict.
     :return:
     """
     if len(keys) != len(values):
-        raise mklibpy.error.ValueSetLengthError(keys, values)
+        raise error.ValueSetLengthError(keys, values)
     d = dict()
     for i in range(len(keys)):
         d[keys[i]] = values[i]
