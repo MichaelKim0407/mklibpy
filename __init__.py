@@ -7,9 +7,11 @@ Python library created by Michael Kim.
 __author__ = 'Michael'
 
 # Packages
+import code
 import data
 import error
 import interact
+import math
 import util
 
-PACKAGES = {util, error, interact, data}
+PACKAGES = {util, error, interact, data, math, code}
