@@ -1,5 +1,5 @@
 """
-__init__.py.py create by Michael for mklibpy package.
+math/vector2.py create by Michael for mklibpy package.
 """
 
 import types

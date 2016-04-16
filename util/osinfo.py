@@ -1,5 +1,5 @@
 """
-osinfo.py create by Michael for mklibpy package.
+util/osinfo.py create by Michael for mklibpy package.
 """
 
 import platform

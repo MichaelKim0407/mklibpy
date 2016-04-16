@@ -1,5 +1,5 @@
 """
-list.py create by Michael for mklibpy package.
+util/list.py create by Michael for mklibpy package.
 
 Utility for collections.
 """

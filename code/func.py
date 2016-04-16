@@ -1,5 +1,5 @@
 """
-func.py create by Michael for mklibpy package.
+code/func.py create by Michael for mklibpy package.
 """
 
 __author__ = 'Michael'

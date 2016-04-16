@@ -1,8 +1,8 @@
 """
-__init__.py create by Michael for mklibpy package.
+math/__init__.py create by Michael for mklibpy package.
 """
-
-__author__ = 'Michael'
 
 # Packages
 import vector2
+
+__author__ = 'Michael'

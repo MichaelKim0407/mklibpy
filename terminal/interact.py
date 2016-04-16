@@ -1,5 +1,5 @@
 """
-interact.py create by Michael for mklibpy package.
+terminal/interact.py create by Michael for mklibpy package.
 
 Terminal-based interactive programming.
 """

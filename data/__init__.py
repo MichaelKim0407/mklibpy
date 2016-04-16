@@ -1,16 +1,16 @@
 """
-__init__.py create by Michael for mklibpy package.
+data/__init__.py create by Michael for mklibpy package.
 """
 
 import mklibpy.util as util
-
-__author__ = 'Michael'
 
 # Packages
 import column
 import config
 import list
 import obj
+
+__author__ = 'Michael'
 
 
 class Data(object):

@@ -1,5 +1,5 @@
 """
-colored_text.py create by Michael for mklibpy package.
+terminal/colored_text.py create by Michael for mklibpy package.
 
 Colored text in terminal.
 """

@@ -1,5 +1,5 @@
 """
-column.py create by Michael for mklibpy package.
+data/column.py create by Michael for mklibpy package.
 """
 
 __author__ = 'Michael'

@@ -1,5 +1,5 @@
 """
-__init__.py create by Michael for mklibpy package.
+terminal/__init__.py create by Michael for mklibpy package.
 
 Utility for terminal-based programs.
 """
@@ -7,6 +7,10 @@ Utility for terminal-based programs.
 import os
 
 import mklibpy.util as util
+
+# Packages
+import colored_text
+import interact
 
 __author__ = 'Michael'
 
@@ -33,7 +37,3 @@ if util.osinfo.LINUX or util.osinfo.MAC:
 elif util.osinfo.WINDOWS:
     def clear_screen():
         os.system("cls")
-
-# Packages
-import colored_text
-import interact

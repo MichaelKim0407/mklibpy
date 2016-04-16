@@ -1,5 +1,5 @@
 """
-config.py create by Michael for mklibpy package.
+data/config.py create by Michael for mklibpy package.
 """
 
 import list

@@ -1,5 +1,5 @@
 """
-obj.py create by Michael for mklibpy package.
+data/obj.py create by Michael for mklibpy package.
 """
 
 import mklibpy.util as util
