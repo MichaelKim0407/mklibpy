@@ -7,8 +7,9 @@ Python library created by Michael Kim.
 __author__ = 'Michael'
 
 # Packages
+import data
 import error
 import interact
 import util
 
-PACKAGES = {util, error, interact}
+PACKAGES = {util, error, interact, data}
