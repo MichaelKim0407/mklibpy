@@ -1,30 +1,12 @@
 """
 interact.py create by Michael for mklibpy package.
 
-Utility for interactive programs.
+Terminal-based interactive programming.
 """
 
-import os
-
-import util.osinfo
+import mklibpy.util as util
 
 __author__ = 'Michael'
-
-
-def print_list(l, width, columns):
-    result = ""
-    x = 0
-    for item in l:
-        s = str(item)
-        d = (len(s) + 1) / width + 1
-        if x + d > columns and x != 0:
-            result += "\n"
-            x = 0
-        spec = "{{: <{}}}".format(width * d)
-        s_right = spec.format(s)
-        result += s_right
-        x += d
-    return result
 
 
 def y_or_n():
@@ -35,13 +17,6 @@ def y_or_n():
         elif usr_input == "N":
             return False
 
-
-if util.osinfo.LINUX or util.osinfo.MAC:
-    def clear_screen():
-        os.system("clear")
-elif util.osinfo.WINDOWS:
-    def clear_screen():
-        os.system("cls")
 
 if util.osinfo.LINUX:
     import readline

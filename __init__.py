@@ -10,8 +10,8 @@ __author__ = 'Michael'
 import code
 import data
 import error
-import interact
 import math
+import terminal
 import util
 
-PACKAGES = {util, error, interact, data, math, code}
+PACKAGES = {util, error, terminal, data, math, code}
