@@ -9,6 +9,15 @@ import mklibpy.error as error
 __author__ = 'Michael'
 
 
+def to_str(l, split=", ", start="[", end="]", fmt=repr):
+    result = ""
+    result += start
+    for item in l[:-1]:
+        result += fmt(item) + split
+    result += fmt(l[-1]) + end
+    return result
+
+
 def to_dict(keys, values):
     """
 Combine a list of keys and a list of values into a dict.
