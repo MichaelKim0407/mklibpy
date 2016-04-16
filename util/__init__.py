@@ -9,4 +9,5 @@ __author__ = 'Michael'
 # Packages
 import args
 import list
+import osinfo
 import path
