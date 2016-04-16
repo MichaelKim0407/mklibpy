@@ -33,9 +33,6 @@ class Option:
         else:
             return "{}".format(self.value)
 
-    def __str__(self):
-        return repr(self)
-
 
 class ParsedArgs(dict):
     def __init__(self, seq=None, **kwargs):
@@ -47,9 +44,6 @@ class ParsedArgs(dict):
     {}
 Arguments:
     {}""".format(dict.__repr__(self), self.names)
-
-    def __str__(self):
-        return repr(self)
 
 
 class OptionArgList(list):
