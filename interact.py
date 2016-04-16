@@ -47,7 +47,7 @@ if util.osinfo.LINUX:
     import readline
 
 
-    class TabAutoComplete:
+    class TabAutoComplete(object):
         Bound = False
 
         def __init__(self, *strings):

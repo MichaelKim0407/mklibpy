@@ -9,7 +9,7 @@ import mklibpy.error as error
 __author__ = 'Michael'
 
 
-class OptionArg:
+class OptionArg(object):
     def __init__(self, letter, fullname, opt_name, opt_value, trail=0):
         self.letter = letter
         self.fullname = fullname
@@ -22,7 +22,7 @@ class OptionArg:
                or other == self.fullname
 
 
-class Option:
+class Option(object):
     def __init__(self, value, *trail):
         self.value = value
         self.trail = list(trail)

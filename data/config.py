@@ -8,7 +8,7 @@ import obj
 __author__ = 'Michael'
 
 
-class LoadConfig:
+class LoadConfig(object):
     def __init__(self, filename, var_name=None, obj_type=obj.DataObject, list_type=list.DataList):
         self.filename = filename
         self.var_name = filename.split(".")[0] if var_name is None else var_name

@@ -9,7 +9,7 @@ import os
 __author__ = 'Michael'
 
 
-class CD:
+class CD(object):
     def __init__(self, path):
         self.cwd = os.path.abspath(os.getcwd())
         self.path = os.path.abspath(path)
