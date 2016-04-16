@@ -18,7 +18,7 @@ class Data(object):
         self.names = []
 
     def __getitem__(self, item):
-        self.__getattribute__(item)
+        getattr(self, item)
 
     def __setitem__(self, key, value):
         self.names.append(key)
