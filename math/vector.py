@@ -15,16 +15,17 @@ class Vector(list):
     Length = None
     AttrNames = dict()
 
-    def __init__(self, *values):
+    def __init__(self, *values, **kwargs):
         if self.__class__.Length is None:
             list.__init__(self, values)
         else:
             list.__init__(self)
+            zero = kwargs["zero"] if "zero" in kwargs else None
             for i in range(self.__class__.Length):
                 if i < len(values):
                     list.append(self, values[i])
                 else:
-                    list.append(self, None)
+                    list.append(self, zero)
 
     def __getattribute__(self, item):
         if item != "__class__" and item in self.__class__.AttrNames:
