@@ -1,9 +1,3 @@
-"""
-util/list.py create by Michael for mklibpy package.
-
-Utility for collections.
-"""
-
 import mklibpy.error as error
 
 __author__ = 'Michael'

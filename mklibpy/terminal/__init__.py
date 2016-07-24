@@ -1,9 +1,3 @@
-"""
-terminal/__init__.py create by Michael for mklibpy package.
-
-Utility for terminal-based programs.
-"""
-
 import os
 
 import mklibpy.util as util

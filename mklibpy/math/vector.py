@@ -1,7 +1,3 @@
-"""
-math/vector.py create by Michael for mklibpy package.
-"""
-
 import types
 
 import mklibpy.code.func as func_util

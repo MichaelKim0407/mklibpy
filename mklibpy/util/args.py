@@ -1,9 +1,3 @@
-"""
-util/args.py create by Michael for mklibpy package.
-
-Utility for execution args.
-"""
-
 import mklibpy.error as error
 
 __author__ = 'Michael'

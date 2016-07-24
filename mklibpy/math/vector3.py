@@ -1,7 +1,3 @@
-"""
-math/vector3.py create by Michael for mklibpy package.
-"""
-
 import math
 
 from . import vector

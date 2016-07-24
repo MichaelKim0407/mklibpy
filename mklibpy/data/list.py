@@ -1,7 +1,3 @@
-"""
-data/list.py create by Michael for mklibpy package.
-"""
-
 from . import column
 from . import obj
 

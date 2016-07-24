@@ -1,9 +1,3 @@
-"""
-error.py create by Michael for mklibpy package.
-
-Errors used in this package.
-"""
-
 __author__ = 'Michael'
 
 

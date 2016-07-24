@@ -1,7 +1,3 @@
-"""
-json_config.py create by Michael for mklibpy package.
-"""
-
 import json
 
 __author__ = 'Michael'

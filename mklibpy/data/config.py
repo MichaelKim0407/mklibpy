@@ -1,7 +1,3 @@
-"""
-data/config.py create by Michael for mklibpy package.
-"""
-
 from . import list
 from . import obj
 

@@ -1,7 +1,3 @@
-"""
-util/osinfo.py create by Michael for mklibpy package.
-"""
-
 import platform
 
 __author__ = 'Michael'

@@ -1,9 +1,3 @@
-"""
-terminal/interact.py create by Michael for mklibpy package.
-
-Terminal-based interactive programming.
-"""
-
 import mklibpy.util as util
 
 __author__ = 'Michael'

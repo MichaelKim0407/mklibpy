@@ -1,9 +1,3 @@
-"""
-terminal/colored_text.py create by Michael for mklibpy package.
-
-Colored text in terminal.
-"""
-
 __author__ = 'Michael'
 
 COLORS = {

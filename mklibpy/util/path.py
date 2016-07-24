@@ -1,9 +1,3 @@
-"""
-util/path.py create by Michael for mklibpy package.
-
-Utility for file system paths.
-"""
-
 import os
 
 __author__ = 'Michael'

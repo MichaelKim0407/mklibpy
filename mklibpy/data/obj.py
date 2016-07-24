@@ -1,7 +1,3 @@
-"""
-data/obj.py create by Michael for mklibpy package.
-"""
-
 import mklibpy.util as util
 
 __author__ = 'Michael'

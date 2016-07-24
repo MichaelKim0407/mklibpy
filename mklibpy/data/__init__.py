@@ -1,7 +1,3 @@
-"""
-data/__init__.py create by Michael for mklibpy package.
-"""
-
 import mklibpy.util as util
 
 from . import column
