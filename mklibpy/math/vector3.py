@@ -4,7 +4,7 @@ math/vector3.py create by Michael for mklibpy package.
 
 import math
 
-import vector
+from . import vector
 
 __author__ = 'Michael'
 

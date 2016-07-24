@@ -4,11 +4,10 @@ data/__init__.py create by Michael for mklibpy package.
 
 import mklibpy.util as util
 
-# Packages
-import column
-import config
-import list
-import obj
+from . import column
+from . import config
+from . import list
+from . import obj
 
 __author__ = 'Michael'
 

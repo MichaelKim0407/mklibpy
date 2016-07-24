@@ -2,8 +2,8 @@
 data/list.py create by Michael for mklibpy package.
 """
 
-import column
-import obj
+from . import column
+from . import obj
 
 __author__ = 'Michael'
 

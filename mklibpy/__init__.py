@@ -4,13 +4,12 @@ __init__.py create by Michael for mklibpy package.
 Python library created by Michael Kim.
 """
 
-# Packages
-import code
-import data
-import error
-import math
-import terminal
-import util
+from . import code
+from . import data
+from . import error
+from . import math
+from . import terminal
+from . import util
 
 __author__ = 'Michael'
 

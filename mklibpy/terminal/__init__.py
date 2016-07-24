@@ -8,9 +8,8 @@ import os
 
 import mklibpy.util as util
 
-# Packages
-import colored_text
-import interact
+from . import colored_text
+from . import interact
 
 __author__ = 'Michael'
 

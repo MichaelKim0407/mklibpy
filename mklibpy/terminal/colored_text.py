@@ -78,16 +78,16 @@ class ColoredText(object):
 
 
 def print_help():
-    print "Usage:"
-    print "    TEXT [-c COLOR] [-m MODE] [TEXT2 [-c COLOR] [-m MODE] [...]]"
-    print ""
-    print "List of colors:"
+    print("Usage:")
+    print("    TEXT [-c COLOR] [-m MODE] [TEXT2 [-c COLOR] [-m MODE] [...]]")
+    print("")
+    print("List of colors:")
     for c_code in COLORS:
-        print "    {}: {}".format(c_code, get_text(COLORS[c_code], color=c_code))
-    print ""
-    print "List of modes:"
+        print("    {}: {}".format(c_code, get_text(COLORS[c_code], color=c_code)))
+    print("")
+    print("List of modes:")
     for m_code in MODES:
-        print "    {}: {}".format(m_code, get_text(MODES[m_code], mode=m_code))
+        print("    {}: {}".format(m_code, get_text(MODES[m_code], mode=m_code)))
 
 
 def main(args):
@@ -117,7 +117,7 @@ def main(args):
             try:
                 result += get_text(text, color, mode)
             except Exception as e:
-                print e
+                print(e)
                 exit(1)
     except Exception:
         print_help()
@@ -132,4 +132,4 @@ if __name__ == "__main__":
     if len(argv) < 2 or "-h" in argv or "--help" in argv:
         print_help()
     else:
-        print main(argv[1:])
+        print(main(argv[1:]))

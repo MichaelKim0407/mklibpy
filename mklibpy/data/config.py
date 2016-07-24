@@ -2,8 +2,8 @@
 data/config.py create by Michael for mklibpy package.
 """
 
-import list
-import obj
+from . import list
+from . import obj
 
 __author__ = 'Michael'
 
