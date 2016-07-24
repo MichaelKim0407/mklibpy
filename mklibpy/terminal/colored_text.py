@@ -1,3 +1,5 @@
+from mklibpy.util.list import format_dict
+
 __author__ = 'Michael'
 
 COLORS = {
@@ -72,16 +74,37 @@ class ColoredText(object):
 
 
 def print_help():
-    print("Usage:")
-    print("    TEXT [-c COLOR] [-m MODE] [TEXT2 [-c COLOR] [-m MODE] [...]]")
-    print("")
-    print("List of colors:")
-    for c_code in COLORS:
-        print("    {}: {}".format(c_code, get_text(COLORS[c_code], color=c_code)))
-    print("")
-    print("List of modes:")
-    for m_code in MODES:
-        print("    {}: {}".format(m_code, get_text(MODES[m_code], mode=m_code)))
+    def __format_dict(d):
+        return format_dict(
+            d,
+            4,
+            "    ",
+            "",
+            ": ",
+            "\n    ",
+            True,
+            False
+        )
+    _COLORS = {
+        c_code: get_text(COLORS[c_code], color=c_code)
+        for c_code in COLORS
+        }
+    _MODES = {
+        m_code: get_text(MODES[m_code], mode=m_code)
+        for m_code in MODES
+    }
+    print("""Usage:
+    TEXT [-c COLOR] [-m MODE] [TEXT2 [-c COLOR] [-m MODE] [...]]
+
+List of colors:
+{}
+
+List of modes:
+{}
+""".format(
+        __format_dict(_COLORS),
+        __format_dict(_MODES)
+    ))
 
 
 def main(args):
@@ -95,7 +118,7 @@ def main(args):
                 args = args[2:]
                 try:
                     color = int(color)
-                except Exception:
+                except:
                     pass
             else:
                 color = None
@@ -104,7 +127,7 @@ def main(args):
                 args = args[2:]
                 try:
                     mode = int(mode)
-                except Exception:
+                except:
                     pass
             else:
                 mode = None
@@ -113,7 +136,7 @@ def main(args):
             except Exception as e:
                 print(e)
                 exit(1)
-    except Exception:
+    except:
         print_help()
         exit(2)
     else:

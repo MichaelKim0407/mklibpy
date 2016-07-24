@@ -3,13 +3,66 @@ import mklibpy.error as error
 __author__ = 'Michael'
 
 
-def to_str(l, split=", ", start="[", end="]", fmt=repr):
+def format_list(l, start="[", end="]", sep=", ", r=True):
     result = ""
     result += start
-    for item in l[:-1]:
-        result += fmt(item) + split
-    result += fmt(l[-1]) + end
+    for i in range(len(l)):
+        if i != 0:
+            result += sep
+        result += repr(l[i]) if r else str(l[i])
+    result += end
     return result
+
+
+def format_list_multiline(l):
+    return format_list(
+        l,
+        "[\n\t",
+        "\n]",
+        ",\n\t"
+    )
+
+
+def format_dict(
+        d,
+        key_width=None,
+        start="{",
+        end="}",
+        k_v=": ",
+        sep=", ",
+        r_key=True,
+        r_val=True
+):
+    l = []
+    if key_width is None:
+        key_format = "{{!{}}}".format(
+            "r" if r_key else "s"
+        )
+    else:
+        key_format = "{{!{}:<{}}}".format(
+            "r" if r_key else "s",
+            key_width
+        )
+    for key in sorted(d.keys()):
+        item = ""
+        item += key_format.format(key)
+        item += k_v
+        item += repr(d[key]) if r_val else str(d[key])
+        l.append(item)
+    return format_list(l, start, end, sep, False)
+
+
+def format_dict_multiline(d, key_width=None):
+    return format_dict(
+        d,
+        key_width,
+        "{\n\t",
+        "\n}",
+        ": ",
+        ",\n\t",
+        True,
+        True
+    )
 
 
 def to_dict(keys, values):

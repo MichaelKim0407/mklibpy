@@ -17,7 +17,14 @@ class CD(object):
 
 def ensure_path(path):
     path = os.path.abspath(path)
-    if not os.path.exists(os.path.dirname(path)):
-        ensure_path(os.path.dirname(path))
     if not os.path.exists(path):
+        ensure_dir(path)
         os.mkdir(path)
+    else:
+        if os.path.isfile(path):
+            raise ValueError("Cannot create folder: \'{}\' is a file!".format(path))
+
+
+def ensure_dir(path):
+    path = os.path.abspath(path)
+    ensure_path(os.path.dirname(path))
