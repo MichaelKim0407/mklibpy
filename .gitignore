@@ -3,3 +3,6 @@
 .idea/
 
 test/
+build/
+dist/
+mklibpy.egg-info/
