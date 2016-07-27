@@ -2,10 +2,15 @@ import mklibpy.util as util
 
 __author__ = 'Michael'
 
+if util.osinfo.PYTHON2:
+    user_input = raw_input
+else:
+    user_input = input
+
 
 def y_or_n():
     while True:
-        usr_input = raw_input("Please input Y or N: ").strip()
+        usr_input = user_input("Please input Y or N: ").strip()
         if usr_input == "Y":
             return True
         elif usr_input == "N":
