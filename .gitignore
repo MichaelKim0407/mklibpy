@@ -6,3 +6,6 @@ test/
 build/
 dist/
 mklibpy.egg-info/
+
+/build.sh
+/upload.sh
