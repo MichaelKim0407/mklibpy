@@ -67,7 +67,8 @@ def format_dict_multiline(d, key_width=None):
 
 def to_dict(keys, values):
     """
-Combine a list of keys and a list of values into a dict.
+    Combine a list of keys and a list of values into a dict.
+
     :param keys:
     :param values:
     :return:
@@ -82,7 +83,8 @@ Combine a list of keys and a list of values into a dict.
 
 def union(*lists):
     """
-Find the union of lists.
+    Find the union of lists.
+
     :param lists:
     :return:
     """
@@ -96,7 +98,8 @@ Find the union of lists.
 
 def intersect(*lists):
     """
-Find the intersection of lists.
+    Find the intersection of lists.
+
     :param lists:
     :return:
     """
@@ -114,7 +117,8 @@ Find the intersection of lists.
 
 def has_all(l1, l2):
     """
-If l1 contains every item in l2.
+    If l1 contains every item in l2.
+
     :param l1:
     :param l2:
     :return:

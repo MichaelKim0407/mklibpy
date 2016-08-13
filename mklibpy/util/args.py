@@ -34,7 +34,8 @@ class ParsedArgs(dict):
         self.names = []
 
     def __repr__(self):
-        return """Options:
+        return """\
+Options:
     {}
 Arguments:
     {}""".format(dict.__repr__(self), self.names)

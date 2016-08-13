@@ -93,7 +93,8 @@ def print_help():
         m_code: get_text(MODES[m_code], mode=m_code)
         for m_code in MODES
     }
-    print("""Usage:
+    print("""\
+Usage:
     TEXT [-c COLOR] [-m MODE] [TEXT2 [-c COLOR] [-m MODE] [...]]
 
 List of colors:
