@@ -123,3 +123,25 @@ If l1 contains every item in l2.
         if item not in l1:
             return False
     return True
+
+
+def any(iterable, match=None):
+    if match is None:
+        for item in iterable:
+            return True
+    else:
+        for item in iterable:
+            if match(item):
+                return True
+    return False
+
+
+def first(iterable, match=None):
+    if match is None:
+        for item in iterable:
+            return item
+    else:
+        for item in iterable:
+            if match(item):
+                return item
+    return None
