@@ -1,3 +1,4 @@
+__pycache__/
 *.py[cod]
 
 .idea/
@@ -5,7 +6,7 @@
 test/
 build/
 dist/
-mklibpy.egg-info/
+*.egg-info/
 
 /build.sh
 /upload.sh
