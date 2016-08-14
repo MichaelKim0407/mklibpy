@@ -4,7 +4,7 @@ __author__ = 'Michael'
 
 
 class DataObject(object):
-    KeyMap = dict()
+    KeyMap = {}
     Split = "\t"
 
     def __init__(self, **kwargs):

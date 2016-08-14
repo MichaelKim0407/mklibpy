@@ -44,7 +44,7 @@ Arguments:
 class OptionArgList(list):
     def __init__(self, iterable=()):
         list.__init__(self, iterable)
-        self.default = dict()
+        self.default = {}
 
     def set_default(self, **options):
         for key in options:

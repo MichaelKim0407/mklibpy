@@ -6,7 +6,7 @@ def get_args(func):
 
 
 def get_default_values(args, defaults):
-    default_values = dict()
+    default_values = {}
     if defaults:
         j = len(args) - len(defaults)
         for i in range(len(defaults)):
@@ -18,7 +18,7 @@ def get_default_values(args, defaults):
 def get_param_map(required_args, default_values, args, kwargs):
     if len(args) > len(required_args):
         raise SyntaxError("More unnamed arguments than required.")
-    param_map = dict()
+    param_map = {}
     for i in range(len(required_args)):
         attr_name = required_args[i]
         if i < len(args):

@@ -75,7 +75,7 @@ def to_dict(keys, values):
     """
     if len(keys) != len(values):
         raise error.ValueSetLengthError(keys, values)
-    d = dict()
+    d = {}
     for i in range(len(keys)):
         d[keys[i]] = values[i]
     return d

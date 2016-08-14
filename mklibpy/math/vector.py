@@ -9,7 +9,7 @@ __author__ = 'Michael'
 
 class Vector(list):
     Length = None
-    AttrNames = dict()
+    AttrNames = {}
 
     def __init__(self, *values, **kwargs):
         if self.__class__.Length is None:
