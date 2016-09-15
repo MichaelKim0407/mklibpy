@@ -1,11 +1,11 @@
 import math
 
-from . import vector
+from . import Vector
 
 __author__ = 'Michael'
 
 
-class Vector3(vector.Vector):
+class Vector3(Vector):
     Length = 3
     AttrNames = {"x": 0, "y": 1, "z": 2}
 
