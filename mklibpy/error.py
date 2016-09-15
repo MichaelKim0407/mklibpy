@@ -6,7 +6,7 @@ class ValueSetLengthError(Exception):
         self.keys = keys
         self.values = values
 
-    def __repr__(self):
+    def __str__(self):
         return "The length of values ({}) is not equal to the length of keys ({})".format(len(self.values),
                                                                                           len(self.keys))
 
@@ -15,7 +15,7 @@ class InvalidExecutionArgumentError(Exception):
     def __init__(self, arg):
         self.arg = arg
 
-    def __repr__(self):
+    def __str__(self):
         return "Invalid option: {}".format(self.arg)
 
 
@@ -24,5 +24,13 @@ class VectorLengthError(Exception):
         self.vec1 = vec1
         self.vec2 = vec2
 
-    def __repr__(self):
+    def __str__(self):
         return "The length of {!r} is not equal to the length of {!r}".format(self.vec1, self.vec2)
+
+
+class RedundantValueError(Exception):
+    def __init__(self, value):
+        self.value = value
+
+    def __str__(self):
+        return "Value {!r} already exists.".format(self.value)
