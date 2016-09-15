@@ -186,7 +186,8 @@ class Vector(list):
     # Code simplification
 
     @classmethod
-    @code.decor.make_multipurpose_decor_params()
+    @code.decor.make_multipurpose_decor_params(
+        code.clazz.filter_item(code.types.is_func_or_method))
     def convert_params(cls, *names):
         def decor(func):
             required_args = code.func.get_args(func)

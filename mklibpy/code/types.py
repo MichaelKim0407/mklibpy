@@ -4,8 +4,8 @@ import types
 
 __author__ = 'Michael'
 
-
-# FIXME Things work really differently in Python 2 and Python 3.
+MethodDescriptorType = type(list.append)
+SlotWrapperType = type(list.__add__)
 
 
 def is_class(obj):
@@ -18,6 +18,20 @@ def is_func(obj):
 
 def is_method(obj):
     return isinstance(obj, types.MethodType)
+
+
+def is_method_descriptor(obj):
+    return isinstance(obj, MethodDescriptorType)
+
+
+def is_slot_wrapper(obj):
+    return isinstance(obj, SlotWrapperType)
+
+
+def is_class_method(obj):
+    return is_func(obj) or is_method(obj) \
+           or is_method_descriptor(obj) \
+           or is_slot_wrapper(obj)
 
 
 def is_func_or_method(obj):
