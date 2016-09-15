@@ -1,7 +1,6 @@
 import os
 
 import mklibpy.util as util
-
 from . import colored_text
 from . import interact
 

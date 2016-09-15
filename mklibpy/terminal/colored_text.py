@@ -85,6 +85,7 @@ def print_help():
             True,
             False
         )
+
     _COLORS = {
         c_code: get_text(COLORS[c_code], color=c_code)
         for c_code in COLORS
@@ -92,7 +93,7 @@ def print_help():
     _MODES = {
         m_code: get_text(MODES[m_code], mode=m_code)
         for m_code in MODES
-    }
+        }
     print("""\
 Usage:
     TEXT [-c COLOR] [-m MODE] [TEXT2 [-c COLOR] [-m MODE] [...]]
