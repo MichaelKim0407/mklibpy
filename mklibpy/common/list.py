@@ -32,7 +32,7 @@ def __unique_list_call(cls, unique):
                     unique(args[0])
                 except Exception as e:
                     args[0][:] = __backup
-                    raise e
+                    raise
             return result
 
         return __new_func
