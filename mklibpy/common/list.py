@@ -24,9 +24,15 @@ METHOD_IGNORE = {
 def __unique_list_call(cls, unique):
     def __wrapper(func):
         def __new_func(*args, **kwargs):
+            if args and isinstance(args[0], cls):
+                __backup = list(args[0])
             result = func(*args, **kwargs)
             if args and isinstance(args[0], cls):
-                unique(args[0])
+                try:
+                    unique(args[0])
+                except Exception as e:
+                    args[0][:] = __backup
+                    raise e
             return result
 
         return __new_func
