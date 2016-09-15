@@ -21,7 +21,7 @@ METHOD_IGNORE = {
 }
 
 
-def unique_list_call(cls, unique):
+def __unique_list_call(cls, unique):
     def __wrapper(func):
         def __new_func(*args, **kwargs):
             result = func(*args, **kwargs)
@@ -34,16 +34,16 @@ def unique_list_call(cls, unique):
     return __wrapper
 
 
-def make_unique_list(unique):
+def __make_unique_list(unique):
     def __wrapper(cls):
         return code.decor.make_class_decor_params(
             code.clazz.filter_name(lambda name: name not in METHOD_IGNORE)
-        )(unique_list_call)(cls, unique)(cls)
+        )(__unique_list_call)(cls, unique)(cls)
 
     return __wrapper
 
 
-def check_unique(l):
+def __check_unique(l):
     s = set()
     for item in l:
         if item in s:
@@ -51,6 +51,6 @@ def check_unique(l):
         s.add(item)
 
 
-@make_unique_list(check_unique)
+@__make_unique_list(__check_unique)
 class UniqueList(list):
     pass
