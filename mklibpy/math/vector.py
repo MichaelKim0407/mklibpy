@@ -1,6 +1,4 @@
-import types
-
-import mklibpy.code.func as func_util
+import mklibpy.code as code
 import mklibpy.error as error
 import mklibpy.util as util
 
@@ -188,56 +186,40 @@ class Vector(list):
     # Code simplification
 
     @classmethod
-    def convert_param(vec_type, *names):
-        def decor(cls_or_func):
-            if isinstance(cls_or_func, type):
-                cls = cls_or_func
-                for name in cls.__dict__:
-                    if name in {"__dict__", "__doc__", "__module__"}:
-                        continue
-                    attr = getattr(cls, name)
-                    new_attr = vec_type.convert_param(*names)(attr)
-                    if isinstance(attr, types.FunctionType):
-                        new_attr = staticmethod(new_attr)
-                    setattr(cls, name, new_attr)
-                return cls
+    @code.decor.make_multipurpose_decor_params()
+    def convert_params(cls, *names):
+        def decor(func):
+            required_args = code.func.get_args(func)
+            default_values = code.func.get_default_values(
+                required_args, func.__defaults__
+            )
 
-            elif isinstance(cls_or_func, types.FunctionType) \
-                    or isinstance(cls_or_func, types.MethodType):
-                func = cls_or_func
-                required_args = func_util.get_args(func)
-                default_values = func_util.get_default_values(
-                    required_args, func.__defaults__
-                )
+            def __convert(_param_map):
+                for name in _param_map:
+                    if name in names:
+                        _param_map[name] = cls.from_item(_param_map[name])
 
-                def __convert(_param_map):
-                    for name in _param_map:
-                        if name in names:
-                            _param_map[name] = vec_type.from_item(_param_map[name])
+            if code.types.is_method(func):
+                # required_args.remove("self")
+                required_args.pop(0)
 
-                if isinstance(cls_or_func, types.MethodType):
-                    required_args.remove("self")
-
-                    def new_func(self, *args, **kwargs):
-                        param_map = func_util.get_param_map(
-                            required_args, default_values,
-                            args, kwargs
-                        )
-                        __convert(param_map)
-                        return func(self, **param_map)
-                else:
-                    def new_func(*args, **kwargs):
-                        param_map = func_util.get_param_map(
-                            required_args, default_values,
-                            args, kwargs
-                        )
-                        __convert(param_map)
-                        return func(**param_map)
-
-                return new_func
-
+                def new_func(self, *args, **kwargs):
+                    param_map = code.func.get_param_map(
+                        required_args, default_values,
+                        args, kwargs
+                    )
+                    __convert(param_map)
+                    return func(self, **param_map)
             else:
-                return cls_or_func
+                def new_func(*args, **kwargs):
+                    param_map = code.func.get_param_map(
+                        required_args, default_values,
+                        args, kwargs
+                    )
+                    __convert(param_map)
+                    return func(**param_map)
+
+            return new_func
 
         return decor
 
