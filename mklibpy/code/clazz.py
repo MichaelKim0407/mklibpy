@@ -5,8 +5,6 @@ def __filters(filters, name, item):
     if not filters:
         return True
     for f in filters:
-        if not f:
-            continue
         if not f(name, item):
             return False
     return True
@@ -39,9 +37,9 @@ def get_all_members(cls, *filters):
     return result
 
 
-def filter_name(name_fileter):
+def filter_name(name_filter):
     def __filter(name, item):
-        return name_fileter(name)
+        return name_filter(name)
 
     return __filter
 

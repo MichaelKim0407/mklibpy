@@ -189,7 +189,7 @@ class Vector(list):
     @code.decor.make_multipurpose_decor_params(
         code.clazz.filter_item(code.types.is_func_or_method))
     def convert_params(cls, *names):
-        def decor(func):
+        def __wrapper(func):
             required_args = code.func.get_args(func)
             default_values = code.func.get_default_values(
                 required_args, func.__defaults__
@@ -222,19 +222,19 @@ class Vector(list):
 
             return new_func
 
-        return decor
+        return __wrapper
 
     @classmethod
-    def convert_attr(vec_type, *names):
-        def decor(cls):
-            __setattr = cls.__setattr__
+    def convert_attr(cls, *names):
+        def __wrapper(decorated_cls):
+            __setattr = decorated_cls.__setattr__
 
             def new_setattr(self, key, value):
                 if key in names:
-                    value = vec_type.from_item(value)
+                    value = cls.from_item(value)
                 __setattr(self, key, value)
 
-            setattr(cls, "__setattr__", new_setattr)
-            return cls
+            setattr(decorated_cls, "__setattr__", new_setattr)
+            return decorated_cls
 
-        return decor
+        return __wrapper

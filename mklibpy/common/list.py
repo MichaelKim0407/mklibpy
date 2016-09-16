@@ -26,14 +26,15 @@ def __unique_list_call(cls, unique):
         def __new_func(*args, **kwargs):
             if args and isinstance(args[0], cls):
                 __backup = list(args[0])
-            result = func(*args, **kwargs)
-            if args and isinstance(args[0], cls):
+                result = func(*args, **kwargs)
                 try:
                     unique(args[0])
-                except Exception as e:
+                except Exception:
                     args[0][:] = __backup
                     raise
-            return result
+                return result
+            else:
+                return func(*args, **kwargs)
 
         return __new_func
 
