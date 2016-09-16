@@ -17,6 +17,42 @@ def y_or_n():
             return False
 
 
+if util.osinfo.WINDOWS:
+    import msvcrt
+
+
+    def getch():
+        """
+        Get a single key from user input. Do not wait for Enter.
+
+        Reference: http://stackoverflow.com/questions/510357/python-read-a-single-character-from-the-user
+
+        :rtype: str
+        :return: The character
+        """
+        return msvcrt.getch()
+else:
+    import sys, tty, termios
+
+
+    def getch():
+        """
+        Get a single key from user input. Do not wait for Enter.
+
+        Reference: http://stackoverflow.com/questions/510357/python-read-a-single-character-from-the-user
+
+        :rtype: str
+        :return: The character
+        """
+        fd = sys.stdin.fileno()
+        old_settings = termios.tcgetattr(fd)
+        try:
+            tty.setraw(sys.stdin.fileno())
+            ch = sys.stdin.read(1)
+        finally:
+            termios.tcsetattr(fd, termios.TCSADRAIN, old_settings)
+        return ch
+
 if util.osinfo.LINUX:
     import readline
 
