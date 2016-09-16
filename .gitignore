@@ -11,3 +11,5 @@ dist/
 /build.sh
 /upload.sh
 /push-master.sh
+
+wiki/
