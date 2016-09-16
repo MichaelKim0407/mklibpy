@@ -3,13 +3,22 @@ import mklibpy.error as error
 __author__ = 'Michael'
 
 
-def format_list(l, start="[", end="]", sep=", ", r=True):
+def format_list(l, start="[", end="]", sep=", ", r=True, formatter=None):
+    def __format_item(item):
+        if formatter is None:
+            if r:
+                return repr(item)
+            else:
+                return str(item)
+        else:
+            return formatter(item)
+
     result = ""
     result += start
     for i in range(len(l)):
         if i != 0:
             result += sep
-        result += repr(l[i]) if r else str(l[i])
+        result += __format_item(l[i])
     result += end
     return result
 
@@ -31,9 +40,9 @@ def format_dict(
         k_v=": ",
         sep=", ",
         r_key=True,
-        r_val=True
+        r_val=True,
+        sort=True
 ):
-    l = []
     if key_width is None:
         key_format = "{{!{}}}".format(
             "r" if r_key else "s"
@@ -43,16 +52,23 @@ def format_dict(
             "r" if r_key else "s",
             key_width
         )
-    for key in sorted(d.keys()):
-        item = ""
-        item += key_format.format(key)
-        item += k_v
-        item += repr(d[key]) if r_val else str(d[key])
-        l.append(item)
-    return format_list(l, start, end, sep, False)
+
+    def __val_formatter(val):
+        return repr(val) if r_val else str(val)
+
+    def __formatter(key):
+        return key_format.format(key) + k_v + __val_formatter(d[key])
+
+    return format_list(
+        sorted(d.keys()) if sort else d.keys(),
+        start,
+        end,
+        sep,
+        formatter=__formatter
+    )
 
 
-def format_dict_multiline(d, key_width=None):
+def format_dict_multiline(d, key_width=None, sort=True):
     return format_dict(
         d,
         key_width,
@@ -61,7 +77,8 @@ def format_dict_multiline(d, key_width=None):
         ": ",
         ",\n\t",
         True,
-        True
+        True,
+        sort
     )
 
 
