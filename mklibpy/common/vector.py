@@ -45,10 +45,10 @@ class Vector(list):
     # Formatting
 
     def __repr__(self):
-        return self.__class__.__name__ + " " + util.list.format_list(self, "(", ")")
+        return self.__class__.__name__ + " " + util.collection.format_list(self, "(", ")")
 
     def __str__(self):
-        return util.list.format_list(self, "", "", " ")
+        return util.collection.format_list(self, "", "", " ")
 
     def __format__(self, spec):
         return self.format(spec).__str__()

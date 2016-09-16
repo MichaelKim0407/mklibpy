@@ -1,4 +1,4 @@
-from mklibpy.util.list import format_dict
+from mklibpy.util.collection import format_dict
 
 __author__ = 'Michael'
 

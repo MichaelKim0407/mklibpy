@@ -103,7 +103,7 @@ class SequenceDict(object):
             self.__dict[key] = kwargs[key]
 
     def __repr__(self):
-        return util.list.format_dict(self, sort=False)
+        return util.collection.format_dict(self, sort=False)
 
     # --- Container methods ---
     # See: https://docs.python.org/3/reference/datamodel.html#emulating-container-types

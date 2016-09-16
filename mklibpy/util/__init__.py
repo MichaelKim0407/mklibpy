@@ -1,5 +1,5 @@
 from . import args
-from . import list
+from . import collection
 from . import osinfo
 from . import path
 

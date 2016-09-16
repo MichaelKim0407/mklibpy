@@ -32,7 +32,7 @@ class DataObject(object):
     @classmethod
     def load(cls, columns, line):
         values = line.split(cls.Split)
-        return cls(**util.list.to_dict(columns, values))
+        return cls(**util.collection.to_dict(columns, values))
 
     def save(self, columns):
         result = ""
