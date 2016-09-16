@@ -3,6 +3,7 @@
 Author: MichaelKim0407 <jinzheng19930407@sina.com>
 
 ## Installation
+
 There are several ways to install this package. Please choose the one that fits you the best.
 
 * Install using pip (recommended)
@@ -30,3 +31,7 @@ There are several ways to install this package. Please choose the one that fits 
 2. Install into a single project (not recommended)
 
     If you only want this package for a single project, you can unpack the `mklibpy` folder in the source root of your project.
+
+## Usage
+
+Please refer to [the project wiki](https://github.com/MichaelKim0407/mklibpy/wiki)
