@@ -8,6 +8,11 @@ __author__ = 'Michael'
 
 
 class Vector(list):
+    """
+    The abstract vector class. Please use a subclass.
+    All subclasses must have Length specified.
+    """
+
     Length = None
     AttrNames = {}
 
@@ -243,6 +248,10 @@ class Vector(list):
 
 
 class Vector2(Vector):
+    """
+    A two-dimensional vector.
+    """
+
     Length = 2
     AttrNames = {"x": 0, "y": 1}
 
@@ -274,6 +283,10 @@ Vector2.ScreenUp = -Vector2.ScreenDown
 
 
 class Vector3(Vector):
+    """
+    A three-dimensional vector.
+    """
+
     Length = 3
     AttrNames = {"x": 0, "y": 1, "z": 2}
 

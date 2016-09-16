@@ -28,7 +28,7 @@ class VectorLengthError(Exception):
         return "The length of {!r} is not equal to the length of {!r}".format(self.vec1, self.vec2)
 
 
-class RedundantValueError(Exception):
+class DuplicateValueError(Exception):
     def __init__(self, value):
         self.value = value
 

@@ -70,12 +70,17 @@ def __check_unique(l):
     s = set()
     for item in l:
         if item in s:
-            raise error.RedundantValueError(item)
+            raise error.DuplicateValueError(item)
         s.add(item)
 
 
 @__make_unique_list(__check_unique)
 class UniqueList(list):
+    """
+    A list in which all values must be unique.
+    Any operation that inserts a duplicate value will raise an mklibpy.error.DuplicateValueError.
+    """
+
     if util.osinfo.PYTHON2:
         def clear(self):
             self[:] = []
@@ -86,6 +91,10 @@ class UniqueList(list):
 
 
 class SequenceDict(object):
+    """
+    A dictionary in which keys are sequenced.
+    """
+
     def __init__(self, *args, **kwargs):
         self.__keys = UniqueList()
         self.__dict = {}
