@@ -1,37 +1,26 @@
-# Introduction
+* class_name
 
-## Base Classes
+    * Introduction
 
-Reference|
----|
+    * Base Classes
 
-# List of contents
+    Reference|
+    ---|
 
-## Variables
+    * Variables
 
-Name|Description
----|---
+    Name|Description
+    ---|---
 
-## Methods
+    * Static methods
 
-### Static methods
+    * Class methods
 
-Name|Parameters|Return|Description
----|---|---|---
+    * Instance methods
 
-### Class methods
+    * Inner Classes
 
-Name|Parameters|Return|Description
----|---|---|---
+    Reference|Description
+    ---|---
 
-### Instance methods
-
-Name|Parameters|Return|Description
----|---|---|---
-
-## Inner Classes
-
-Reference|Description
----|---
-
-# Examples
+    * Examples
