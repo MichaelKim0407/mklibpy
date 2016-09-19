@@ -141,26 +141,6 @@ class SequenceDict(object):
     def __contains__(self, item):
         return self.__keys.__contains__(item)
 
-    # --- Standard list operations ---
-
-    def index(self, value, start=None, stop=None):
-        if start is None:
-            return self.__keys.index(value)
-        elif stop is None:
-            return self.__keys.index(value, start)
-        else:
-            return self.__keys.index(value, start, stop)
-
-    def reverse(self):
-        self.__keys.reverse()
-
-    if util.osinfo.PYTHON2:
-        def sort(self, cmp=None, key=None, reverse=False):
-            self.__keys.sort(cmp, key, reverse)
-    else:
-        def sort(self, key=None, reverse=False):
-            self.__keys.sort(key=key, reverse=reverse)
-
     # --- SequenceDict operations ---
 
     def clear(self):
@@ -170,19 +150,20 @@ class SequenceDict(object):
     def copy(self):
         return SequenceDict(*self.__keys, **self.__dict)
 
-    def keys(self):
-        return list(self.__keys)
-
-    def values(self):
-        def __gen():
-            for key in self:
-                yield self[key]
-
-        return list(__gen())
+    def index(self, value, start=None, stop=None):
+        if start is None:
+            return self.__keys.index(value)
+        elif stop is None:
+            return self.__keys.index(value, start)
+        else:
+            return self.__keys.index(value, start, stop)
 
     def insert(self, index, key, value):
         self.__keys.insert(index, key)
         self[key] = value
+
+    def keys(self):
+        return list(self.__keys)
 
     def pop(self, key):
         self.__keys.remove(key)
@@ -192,3 +173,32 @@ class SequenceDict(object):
         key = self.__keys.pop(index)
         val = self.__dict.pop(key)
         return key, val
+
+    def reverse(self):
+        self.__keys.reverse()
+
+    if util.osinfo.PYTHON2:
+        def sort(self, cmp=None, key=None, reverse=False):
+            self.__keys.sort(cmp, key, reverse)
+
+        def sort_by_value(self, cmp=None, key=None, reverse=False):
+            if cmp is not None:
+                cmp = lambda x, y: cmp(self[x], self[y])
+            if key is not None:
+                key = lambda x: key(self[x])
+            self.__keys.sort(cmp, key, reverse)
+    else:
+        def sort(self, key=None, reverse=False):
+            self.__keys.sort(key=key, reverse=reverse)
+
+        def sort_by_value(self, key=None, reverse=False):
+            if key is not None:
+                key = lambda x: key(self[x])
+            self.__keys.sort(key=key, reverse=reverse)
+
+    def values(self):
+        def __gen():
+            for key in self:
+                yield self[key]
+
+        return list(__gen())
