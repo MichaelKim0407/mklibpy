@@ -4,9 +4,51 @@ import mklibpy.util as util
 
 __author__ = 'Michael'
 
+
+class StandardList(list):
+    if util.osinfo.PYTHON2:
+        def clear(self):
+            self[:] = []
+            # or self *= 0
+
+    def copy(self, cls=None):
+        if cls is None:
+            cls = self.__class__
+        return cls(self)
+
+    def split(self, size, cls=None, container=None):
+        if not isinstance(size, int):
+            raise TypeError(size)
+        if size <= 0:
+            raise ValueError(size)
+
+        if cls is None:
+            cls = self.__class__
+
+        if container is None:
+            container = StandardList
+
+        def __gen():
+            __size = 0
+            __this = cls()
+
+            for item in self:
+                __size += 1
+                __this.append(item)
+                if __size == size:
+                    yield __this
+                    __size = 0
+                    __this = cls()
+
+            if __size > 0:
+                yield __this
+
+        return container(__gen())
+
+
 # We should ignore all methods that does not modify the content of the list,
 # or does not create a conflict.
-METHOD_IGNORE = {
+LIST_METHOD_IGNORE = {
     "__add__",
     "__contains__",
     "__delitem__",
@@ -37,31 +79,31 @@ METHOD_IGNORE = {
 }
 
 
-def __unique_list_call(cls, unique):
-    def __wrapper(func):
-        def __new_func(*args, **kwargs):
+def __post_list_call(cls, func):
+    def __wrapper(method):
+        def __new_method(*args, **kwargs):
             if args and isinstance(args[0], cls):
                 __backup = list(args[0])
-                result = func(*args, **kwargs)
+                result = method(*args, **kwargs)
                 try:
-                    unique(args[0])
+                    func(args[0])
                 except Exception:
                     args[0][:] = __backup
                     raise
                 return result
             else:
-                return func(*args, **kwargs)
+                return method(*args, **kwargs)
 
-        return __new_func
+        return __new_method
 
     return __wrapper
 
 
-def __make_unique_list(unique):
+def __make_list(func):
     def __wrapper(cls):
         return code.decor.make_class_decor_params(
-            code.clazz.filter_name(lambda name: name not in METHOD_IGNORE)
-        )(__unique_list_call)(cls, unique)(cls)
+            code.clazz.filter_name(lambda name: name not in LIST_METHOD_IGNORE)
+        )(__post_list_call)(cls, func)(cls)
 
     return __wrapper
 
@@ -74,20 +116,13 @@ def __check_unique(l):
         s.add(item)
 
 
-@__make_unique_list(__check_unique)
-class UniqueList(list):
+@__make_list(__check_unique)
+class UniqueList(StandardList):
     """
     A list in which all values must be unique.
     Any operation that inserts a duplicate value will raise an mklibpy.error.DuplicateValueError.
     """
-
-    if util.osinfo.PYTHON2:
-        def clear(self):
-            self[:] = []
-            # or self *= 0
-
-    def copy(self):
-        return UniqueList(self)
+    pass
 
 
 class SequenceDict(object):
@@ -202,3 +237,55 @@ class SequenceDict(object):
                 yield self[key]
 
         return list(__gen())
+
+
+def __check_type(l):
+    for item in l:
+        if not isinstance(item, l.TYPE):
+            raise TypeError(item)
+
+
+@__make_list(__check_type)
+class TypedList(StandardList):
+    TYPE = object
+
+
+class BinaryArray(TypedList):
+    TYPE = bool
+
+    def to_int(self):
+        result = 0
+        for item in self:
+            result *= 2
+            if item:
+                result += 1
+        return result
+
+    @classmethod
+    def from_int(cls, value, size):
+        result = cls()
+        while size > 0:
+            if value % 2 == 1:
+                result.insert(0, True)
+                value -= 1
+            else:
+                result.insert(0, False)
+            value /= 2
+            size -= 1
+        return result
+
+    @classmethod
+    def iter_all(cls, size):
+        # We can also use range(2 ** size) and from_int
+        if not isinstance(size, int):
+            raise TypeError(size)
+        if size < 0:
+            raise ValueError(size)
+
+        if size == 0:
+            yield []
+            return
+
+        for this in [False, True]:
+            for append in BinaryArray.iter_all(size - 1):
+                yield cls([this] + append)
