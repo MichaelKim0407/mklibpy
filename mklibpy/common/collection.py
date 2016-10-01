@@ -353,17 +353,29 @@ class SequenceDict(object):
 def __check_type(l):
     for item in l:
         if not isinstance(item, l.TYPE):
-            raise TypeError(item)
+            raise TypeError("{!r} is not of type {}".format(item, l.TYPE))
 
 
 @__make_list(__check_type)
-class TypedList(StandardList):
+class __TypedList(StandardList):
     TYPE = object
 
 
-class BinaryArray(TypedList):
-    TYPE = bool
+__typed_list_classes = {}
 
+
+def typed_list_cls(type):
+    if type in __typed_list_classes:
+        return __typed_list_classes[type]
+    else:
+        class __new_cls(__TypedList):
+            TYPE = type
+
+        __typed_list_classes[type] = __new_cls
+        return __new_cls
+
+
+class BinaryArray(typed_list_cls(bool)):
     def to_int(self):
         result = 0
         for item in self:
