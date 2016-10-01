@@ -6,6 +6,93 @@ __author__ = 'Michael'
 
 
 class StandardList(list):
+    # --- conversions ---
+
+    CONVERSION_ACCEPT_LIST = True
+    CONVERSION_ACCEPT_TUPLE = False
+
+    @classmethod
+    def from_list(cls, obj):
+        return cls(*obj)
+
+    @classmethod
+    def from_tuple(cls, obj):
+        return cls(*obj)
+
+    @classmethod
+    def from_item(cls, obj, accept_list=None, accept_tuple=None):
+        if accept_list is None:
+            accept_list = cls.CONVERSION_ACCEPT_LIST
+        if accept_tuple is None:
+            accept_tuple = cls.CONVERSION_ACCEPT_TUPLE
+
+        if isinstance(obj, cls):
+            return cls
+        elif accept_list and isinstance(obj, list):
+            return cls.from_list(obj)
+        elif accept_tuple and isinstance(obj, tuple):
+            return cls.from_tuple(obj)
+        else:
+            raise TypeError(obj)
+
+    # --- Code simplification ---
+
+    @classmethod
+    @code.decor.make_multipurpose_decor_params(
+        code.clazz.filter_item(code.types.is_func_or_method))
+    def convert_params(cls, *names, accept_list=None, accept_tuple=None):
+        def __wrapper(func):
+            required_args = code.func.get_args(func)
+            default_values = code.func.get_default_values(
+                required_args, func.__defaults__
+            )
+
+            def __convert(_param_map):
+                for name in _param_map:
+                    if name in names:
+                        _param_map[name] = cls.from_item(_param_map[name], accept_list, accept_tuple)
+
+            if code.types.is_method(func):
+                # required_args.remove("self")
+                required_args.pop(0)
+
+                def new_func(self, *args, **kwargs):
+                    param_map = code.func.get_param_map(
+                        required_args, default_values,
+                        args, kwargs
+                    )
+                    __convert(param_map)
+                    return func(self, **param_map)
+            else:
+                def new_func(*args, **kwargs):
+                    param_map = code.func.get_param_map(
+                        required_args, default_values,
+                        args, kwargs
+                    )
+                    __convert(param_map)
+                    return func(**param_map)
+
+            return new_func
+
+        return __wrapper
+
+    @classmethod
+    def convert_attr(cls, *names, accept_list=None, accept_tuple=None):
+        def __wrapper(decorated_cls):
+            __setattr = decorated_cls.__setattr__
+
+            def new_setattr(self, key, value):
+                if key in names:
+                    value = cls.from_item(value, accept_list, accept_tuple)
+                __setattr(self, key, value)
+
+            setattr(decorated_cls, "__setattr__", new_setattr)
+            return decorated_cls
+
+        return __wrapper
+
+    # --- list methods ---
+
     if util.osinfo.PYTHON2:
         def clear(self):
             self[:] = []

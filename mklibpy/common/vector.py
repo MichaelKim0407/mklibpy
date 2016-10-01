@@ -1,17 +1,20 @@
 import math
 
-import mklibpy.code as code
 import mklibpy.error as error
 import mklibpy.util as util
+
+from . import collection
 
 __author__ = 'Michael'
 
 
-class Vector(list):
+class Vector(collection.StandardList):
     """
     The abstract vector class. Please use a subclass.
     All subclasses must have Length specified.
     """
+    CONVERSION_ACCEPT_LIST = False
+    CONVERSION_ACCEPT_TUPLE = True
 
     Length = None
     AttrNames = {}
@@ -33,19 +36,6 @@ class Vector(list):
             return self[self.__class__.AttrNames[item]]
         else:
             return object.__getattribute__(self, item)
-
-    @classmethod
-    def from_tuple(cls, item):
-        return cls(*item)
-
-    @classmethod
-    def from_item(cls, item):
-        if isinstance(item, cls):
-            return item
-        elif isinstance(item, tuple):
-            return cls.from_tuple(item)
-        else:
-            raise TypeError(item)
 
     # Formatting
 
@@ -189,62 +179,6 @@ class Vector(list):
     @classmethod
     def unit_float(cls, i, length=None):
         return cls.unit(0.0, 1.0, i, length)
-
-    # Code simplification
-
-    @classmethod
-    @code.decor.make_multipurpose_decor_params(
-        code.clazz.filter_item(code.types.is_func_or_method))
-    def convert_params(cls, *names):
-        def __wrapper(func):
-            required_args = code.func.get_args(func)
-            default_values = code.func.get_default_values(
-                required_args, func.__defaults__
-            )
-
-            def __convert(_param_map):
-                for name in _param_map:
-                    if name in names:
-                        _param_map[name] = cls.from_item(_param_map[name])
-
-            if code.types.is_method(func):
-                # required_args.remove("self")
-                required_args.pop(0)
-
-                def new_func(self, *args, **kwargs):
-                    param_map = code.func.get_param_map(
-                        required_args, default_values,
-                        args, kwargs
-                    )
-                    __convert(param_map)
-                    return func(self, **param_map)
-            else:
-                def new_func(*args, **kwargs):
-                    param_map = code.func.get_param_map(
-                        required_args, default_values,
-                        args, kwargs
-                    )
-                    __convert(param_map)
-                    return func(**param_map)
-
-            return new_func
-
-        return __wrapper
-
-    @classmethod
-    def convert_attr(cls, *names):
-        def __wrapper(decorated_cls):
-            __setattr = decorated_cls.__setattr__
-
-            def new_setattr(self, key, value):
-                if key in names:
-                    value = cls.from_item(value)
-                __setattr(self, key, value)
-
-            setattr(decorated_cls, "__setattr__", new_setattr)
-            return decorated_cls
-
-        return __wrapper
 
 
 class Vector2(Vector):
