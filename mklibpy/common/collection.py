@@ -16,6 +16,13 @@ class StandardList(list):
             cls = self.__class__
         return cls(self)
 
+    if util.osinfo.PYTHON2:
+        def sort(self, key=None, reverse=False):
+            list.sort(self, None, key, reverse)
+    else:
+        def sort(self, key=None, reverse=False):
+            list.sort(self, key=key, reverse=reverse)
+
     def split(self, size, cls=None, container=None):
         if not isinstance(size, int):
             raise TypeError(size)
@@ -212,24 +219,13 @@ class SequenceDict(object):
     def reverse(self):
         self.__keys.reverse()
 
-    if util.osinfo.PYTHON2:
-        def sort(self, cmp=None, key=None, reverse=False):
-            self.__keys.sort(cmp, key, reverse)
+    def sort(self, key=None, reverse=False):
+        self.__keys.sort(key=key, reverse=reverse)
 
-        def sort_by_value(self, cmp=None, key=None, reverse=False):
-            if cmp is not None:
-                cmp = lambda x, y: cmp(self[x], self[y])
-            if key is not None:
-                key = lambda x: key(self[x])
-            self.__keys.sort(cmp, key, reverse)
-    else:
-        def sort(self, key=None, reverse=False):
-            self.__keys.sort(key=key, reverse=reverse)
-
-        def sort_by_value(self, key=None, reverse=False):
-            if key is not None:
-                key = lambda x: key(self[x])
-            self.__keys.sort(key=key, reverse=reverse)
+    def sort_by_value(self, key=None, reverse=False):
+        if key is not None:
+            key = lambda x: key(self[x])
+        self.__keys.sort(key=key, reverse=reverse)
 
     def values(self):
         def __gen():
