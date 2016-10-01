@@ -40,7 +40,21 @@ class StandardList(list):
     @classmethod
     @code.decor.make_multipurpose_decor_params(
         code.clazz.filter_item(code.types.is_func_or_method))
-    def convert_params(cls, *names, accept_list=None, accept_tuple=None):
+    def convert_params(cls, *names, **kwargs):
+        """
+        Decorate a function or a class,
+        so that all parameters whose name is in *names
+        will be converted.
+
+        :param names:
+            A list of names.
+
+        :param kwargs:
+            Arguments for class.from_item except the first one.
+
+        :return: @decorator
+        """
+
         def __wrapper(func):
             required_args = code.func.get_args(func)
             default_values = code.func.get_default_values(
@@ -50,7 +64,7 @@ class StandardList(list):
             def __convert(_param_map):
                 for name in _param_map:
                     if name in names:
-                        _param_map[name] = cls.from_item(_param_map[name], accept_list, accept_tuple)
+                        _param_map[name] = cls.from_item(_param_map[name], **kwargs)
 
             if code.types.is_method(func):
                 # required_args.remove("self")
@@ -77,13 +91,27 @@ class StandardList(list):
         return __wrapper
 
     @classmethod
-    def convert_attr(cls, *names, accept_list=None, accept_tuple=None):
+    def convert_attr(cls, *names, **kwargs):
+        """
+        Decorate a class,
+        so that all members whose name is in *names
+        will be converted.
+
+        :param names:
+            A list of names.
+
+        :param kwargs:
+            Arguments for class.from_item except the first one.
+
+        :return: @decorator
+        """
+
         def __wrapper(decorated_cls):
             __setattr = decorated_cls.__setattr__
 
             def new_setattr(self, key, value):
                 if key in names:
-                    value = cls.from_item(value, accept_list, accept_tuple)
+                    value = cls.from_item(value, **kwargs)
                 __setattr(self, key, value)
 
             setattr(decorated_cls, "__setattr__", new_setattr)
