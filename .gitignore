@@ -8,8 +8,8 @@ build/
 dist/
 *.egg-info/
 
-/build.sh
-/upload.sh
-/push-master.sh
+build.sh
+upload.sh
+push-master.sh
 
 wiki/
