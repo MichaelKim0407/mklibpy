@@ -412,3 +412,56 @@ class BinaryArray(typed_list_cls(bool)):
         for this in [False, True]:
             for append in BinaryArray.iter_all(size - 1):
                 yield cls([this] + append)
+
+
+class AnyCollection(object):
+    DEFAULT_LIST_TYPE = StandardList
+
+    def __init__(self, objects=[], li_cls=None):
+        if li_cls is None:
+            li_cls = self.DEFAULT_LIST_TYPE
+        self.__li = li_cls(objects)
+
+    def __repr__(self):
+        return "*" + repr(self.__li)
+
+    def __eq__(self, other):
+        for obj in self:
+            if obj == other:
+                return True
+        return False
+
+    def __nonzero__(self):
+        for obj in self:
+            if obj:
+                return True
+        return False
+
+    def __contains__(self, item):
+        for obj in self:
+            if item in obj:
+                return True
+        return False
+
+    def __iter__(self):
+        return self.__li.__iter__()
+
+    def __call__(self, *args, **kwargs):
+        return AnyCollection([obj(*args, **kwargs) for obj in self])
+
+    def add(self, *objects):
+        self.__li.extend(objects)
+
+    def items(self, li_cls=None):
+        if li_cls is None:
+            li_cls = self.DEFAULT_LIST_TYPE
+        return li_cls(self)
+
+    def call(self, call, *args, **kwargs):
+        return AnyCollection([call(obj, *args, **kwargs) for obj in self])
+
+    def __getattribute__(self, name):
+        try:
+            return object.__getattribute__(self, name)
+        except AttributeError:
+            return AnyCollection([getattr(obj, name) for obj in self])
