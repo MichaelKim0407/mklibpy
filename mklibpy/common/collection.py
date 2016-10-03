@@ -505,6 +505,13 @@ class AnyCollection(object):
                     return True
             return False
 
+    def __len__(self):
+        count = 0
+        for obj in self:
+            if obj:
+                count += 1
+        return count
+
     # --- standard methods ---
 
     @classmethod
