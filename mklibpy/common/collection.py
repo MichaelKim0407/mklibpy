@@ -121,7 +121,7 @@ class StandardList(list):
 
     # --- list methods ---
 
-    if util.osinfo.PYTHON2:
+    if util.osinfo.PYTHON2:  # list.clear does not exists in Python 2
         def clear(self):
             self[:] = []
             # or self *= 0
@@ -131,7 +131,7 @@ class StandardList(list):
             cls = self.__class__
         return cls(self)
 
-    if util.osinfo.PYTHON2:
+    if util.osinfo.PYTHON2:  # list.sort in Python 2 & 3 are different
         def sort(self, key=None, reverse=False):
             list.sort(self, None, key, reverse)
     else:
