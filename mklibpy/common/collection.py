@@ -417,10 +417,40 @@ class BinaryArray(typed_list_cls(bool)):
 class AnyCollection(object):
     DEFAULT_LIST_TYPE = StandardList
 
-    def __init__(self, objects=[], li_cls=None):
-        if li_cls is None:
-            li_cls = self.DEFAULT_LIST_TYPE
-        self.__li = li_cls(objects)
+    @classmethod
+    def _make_list(cls, objects):
+        if cls == AnyCollection:
+            return StandardList(objects)
+        try:
+            return cls.DEFAULT_LIST_TYPE(objects)
+        except:
+            return cls.__base__._make_list(objects)
+
+    def __make_list(self, objects, li_cls):
+        try:
+            return li_cls(objects)
+        except:
+            try:
+                return self.__li_cls(objects)
+            except:
+                return self._make_list(objects)
+
+    @classmethod
+    def _make_collection(cls, *args, **kwargs):
+        if cls == AnyCollection:
+            return AnyCollection(*args, **kwargs)
+        try:
+            return cls(*args, **kwargs)
+        except:
+            return cls.__base__._make_collection(*args, **kwargs)
+
+    def __init__(self, objects=[], li_cls=None, cls=None):
+        self.__li_cls = self.DEFAULT_LIST_TYPE if li_cls is None else li_cls
+        self.__li = self.__make_list(objects, li_cls)
+
+        if cls is None:
+            cls = self.__class__
+        self.__cls = cls
 
     def __repr__(self):
         return "*" + repr(self.__li)
@@ -447,21 +477,22 @@ class AnyCollection(object):
         return self.__li.__iter__()
 
     def __call__(self, *args, **kwargs):
-        return AnyCollection([obj(*args, **kwargs) for obj in self])
+        result = [obj(*args, **kwargs) for obj in self]
+        return self.__cls._make_collection(result, self.__li_cls, self.__cls)
 
     def add(self, *objects):
         self.__li.extend(objects)
 
     def items(self, li_cls=None):
-        if li_cls is None:
-            li_cls = self.DEFAULT_LIST_TYPE
-        return li_cls(self)
+        return self.__make_list(self.__li, li_cls)
 
     def call(self, call, *args, **kwargs):
-        return AnyCollection([call(obj, *args, **kwargs) for obj in self])
+        result = [call(obj, *args, **kwargs) for obj in self]
+        return self.__cls._make_collection(result, self.__li_cls, self.__cls)
 
     def __getattribute__(self, name):
         try:
             return object.__getattribute__(self, name)
         except AttributeError:
-            return AnyCollection([getattr(obj, name) for obj in self])
+            result = [getattr(obj, name) for obj in self]
+            return self.__cls._make_collection(result, self.__li_cls, self.__cls)
