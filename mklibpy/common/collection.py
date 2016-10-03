@@ -417,6 +417,18 @@ class BinaryArray(typed_list_cls(bool)):
 class AnyCollection(object):
     DEFAULT_LIST_TYPE = StandardList
 
+    # --- initialization ---
+
+    def __init__(self, objects=[], li_cls=None, cls=None):
+        self.__li_cls = self.DEFAULT_LIST_TYPE if li_cls is None else li_cls
+        self.__li = self.__make_list(objects, li_cls)
+
+        if cls is None:
+            cls = self.__class__
+        self.__cls = cls
+
+    # --- content list ---
+
     @classmethod
     def _make_list(cls, objects):
         if cls == AnyCollection:
@@ -435,6 +447,22 @@ class AnyCollection(object):
             except:
                 return self._make_list(objects)
 
+    def __iter__(self):
+        return self.__li.__iter__()
+
+    def items(self, li_cls=None):
+        return self.__make_list(self.__li, li_cls)
+
+    def add(self, *objects):
+        self.__li.extend(objects)
+
+    # --- to str ---
+
+    def __repr__(self):
+        return "*" + repr(self.__li)
+
+    # --- transformations ---
+
     @classmethod
     def _make_collection(cls, *args, **kwargs):
         if cls == AnyCollection:
@@ -444,55 +472,68 @@ class AnyCollection(object):
         except:
             return cls.__base__._make_collection(*args, **kwargs)
 
-    def __init__(self, objects=[], li_cls=None, cls=None):
-        self.__li_cls = self.DEFAULT_LIST_TYPE if li_cls is None else li_cls
-        self.__li = self.__make_list(objects, li_cls)
-
-        if cls is None:
-            cls = self.__class__
-        self.__cls = cls
-
-    def __repr__(self):
-        return "*" + repr(self.__li)
-
-    def __eq__(self, other):
-        for obj in self:
-            if obj == other:
-                return True
-        return False
-
-    def __nonzero__(self):
-        for obj in self:
-            if obj:
-                return True
-        return False
-
-    def __contains__(self, item):
-        for obj in self:
-            if item in obj:
-                return True
-        return False
-
-    def __iter__(self):
-        return self.__li.__iter__()
-
-    def __call__(self, *args, **kwargs):
-        result = [obj(*args, **kwargs) for obj in self]
-        return self.__cls._make_collection(result, self.__li_cls, self.__cls)
-
-    def add(self, *objects):
-        self.__li.extend(objects)
-
-    def items(self, li_cls=None):
-        return self.__make_list(self.__li, li_cls)
-
-    def call(self, call, *args, **kwargs):
-        result = [call(obj, *args, **kwargs) for obj in self]
+    def __getattribute(self, name):
+        result = [getattr(obj, name) for obj in self]
         return self.__cls._make_collection(result, self.__li_cls, self.__cls)
 
     def __getattribute__(self, name):
         try:
             return object.__getattribute__(self, name)
         except AttributeError:
-            result = [getattr(obj, name) for obj in self]
-            return self.__cls._make_collection(result, self.__li_cls, self.__cls)
+            return self.__getattribute(name)
+
+    def __call__(self, *args, **kwargs):
+        result = [obj(*args, **kwargs) for obj in self]
+        return self.__cls._make_collection(result, self.__li_cls, self.__cls)
+
+    def call(self, call, *args, **kwargs):
+        result = [call(obj, *args, **kwargs) for obj in self]
+        return self.__cls._make_collection(result, self.__li_cls, self.__cls)
+
+    # --- nonzero: True or False ---
+
+    if util.osinfo.PYTHON2:
+        def __nonzero__(self):
+            for obj in self:
+                if obj:
+                    return True
+            return False
+    else:
+        def __bool__(self):
+            for obj in self:
+                if obj:
+                    return True
+            return False
+
+    # --- standard methods ---
+
+    @classmethod
+    def add_method(cls, name):
+        def __method(self, *args, **kwargs):
+            return self.__getattribute(name)(*args, **kwargs)
+
+        setattr(cls, name, __method)
+
+    @classmethod
+    def add_methods(cls, *names):
+        for name in names:
+            cls.add_method(name)
+
+
+# See: https://docs.python.org/3/reference/datamodel.html
+__ANY_COLLECTION_ADD_METHODS = {
+    "__lt__", "__le__", "__eq__", "__ne__", "__gt__", "__ge__",
+    "__contains__",
+    "__neg__", "__pos__", "__abs__", "__invert__",
+    "__complex__", "__int__", "__float__", "__round__"
+}
+
+__MATH_OPERATORS = {
+    "add", "sub", "mul", "matmul", "truediv", "floordiv", "mod", "divmod", "pow", "lshift", "rshift", "and", "xor", "or"
+}
+
+for __oper in __MATH_OPERATORS:
+    __ANY_COLLECTION_ADD_METHODS.add("__{}__".format(__oper))
+    __ANY_COLLECTION_ADD_METHODS.add("__r{}__".format(__oper))
+
+AnyCollection.add_methods(*__ANY_COLLECTION_ADD_METHODS)
