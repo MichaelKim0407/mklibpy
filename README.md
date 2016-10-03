@@ -34,4 +34,6 @@ There are several ways to install this package. Please choose the one that fits 
 
 ## Usage
 
-Please refer to [the project wiki](https://github.com/MichaelKim0407/mklibpy/wiki)
+Please refer to [the project wiki](https://github.com/MichaelKim0407/mklibpy/wiki).
+
+You may also have a look at the [test scripts](https://github.com/MichaelKim0407/mklibpy-test) to learn a few tricks.
