@@ -64,8 +64,8 @@ def format_dict(
         sep=", ",
         sort=True,
         key_width=None,
-        key_formatter=None,
         r_key=True,
+        key_formatter=None,
         r_val=True,
         val_formatter=None
 ):
@@ -88,10 +88,10 @@ def format_dict(
     :param sort: Whether keys are sorted
     :type key_width: int
     :param key_width: The minimum width for which the key is formatted with
-    :type key_formatter: obj -> str
-    :param key_formatter:
     :type r_key: bool
     :param r_key: Whether keys are formatted with repr or str
+    :type key_formatter: obj -> str
+    :param key_formatter:
     :type r_val: bool
     :param r_val: Whether values are formatted with repr or str
     :type val_formatter: obj -> str
