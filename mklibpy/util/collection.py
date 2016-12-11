@@ -3,7 +3,14 @@ import mklibpy.error as _error
 __author__ = 'Michael'
 
 
-def format_list(l, start="[", end="]", sep=", ", r=True, formatter=None):
+def format_list(
+        l,
+        start="[",
+        end="]",
+        sep=", ",
+        r=True,
+        formatter=None
+):
     """
     Format a list.
 
@@ -54,6 +61,37 @@ def format_list_multiline(l, **kwargs):
         sep=",\n\t",
         **kwargs
     )
+
+
+def format_list_rows(
+        l,
+        width=None,
+        columns=None,
+        left=True,
+        r=True,
+        formatter=None
+):
+    if formatter is None:
+        formatter = repr if r else str
+
+    result = ""
+    cur_col = 0
+    for item in l:
+        if cur_col >= columns and cur_col != 0:
+            result += "\n"
+            cur_col = 0
+        s = formatter(item)
+        if width is None:
+            col_add = 1
+            result += s + " "
+        else:
+            col_add = int((len(s) + 1) / width) + 1
+            spec = "{{: {}{}}}".format("<" if left else ">", width * col_add)
+            result += spec.format(s)
+        if columns is None:
+            continue
+        cur_col += col_add
+    return result
 
 
 def format_dict(
