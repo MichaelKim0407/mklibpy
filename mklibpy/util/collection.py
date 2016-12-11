@@ -36,7 +36,7 @@ def format_list(l, start="[", end="]", sep=", ", r=True, formatter=None):
     return result
 
 
-def format_list_multiline(l):
+def format_list_multiline(l, **kwargs):
     """
     Format a list into multiple lines.
 
@@ -49,22 +49,25 @@ def format_list_multiline(l):
     """
     return format_list(
         l,
-        "[\n\t",
-        "\n]",
-        ",\n\t"
+        start="[\n\t",
+        end="\n]",
+        sep=",\n\t",
+        **kwargs
     )
 
 
 def format_dict(
         d,
-        key_width=None,
         start="{",
         end="}",
         k_v=": ",
         sep=", ",
+        sort=True,
+        key_width=None,
+        key_formatter=None,
         r_key=True,
         r_val=True,
-        sort=True
+        val_formatter=None
 ):
     """
     Format a dict.
@@ -73,8 +76,6 @@ def format_dict(
 
     :type d: dict
     :param d: The dict to format
-    :type key_width: int
-    :param key_width: The minimum width for which the key is formatted with
     :type start: str
     :param start:
     :type end: str
@@ -83,63 +84,66 @@ def format_dict(
     :param k_v:
     :type sep: str
     :param sep:
+    :type sort: bool
+    :param sort: Whether keys are sorted
+    :type key_width: int
+    :param key_width: The minimum width for which the key is formatted with
+    :type key_formatter: obj -> str
+    :param key_formatter:
     :type r_key: bool
     :param r_key: Whether keys are formatted with repr or str
     :type r_val: bool
     :param r_val: Whether values are formatted with repr or str
-    :type sort: bool
-    :param sort: Whether keys are sorted
+    :type val_formatter: obj -> str
+    :param val_formatter:
     :rtype: str
     :return: The result str
     """
-    if key_width is None:
-        key_format = "{{!{}}}".format(
-            "r" if r_key else "s"
-        )
-    else:
-        key_format = "{{!{}:<{}}}".format(
-            "r" if r_key else "s",
-            key_width
-        )
+    if key_formatter is None:
+        if key_width is None:
+            key_format = "{{!{}}}".format(
+                "r" if r_key else "s"
+            )
+        else:
+            key_format = "{{!{}:<{}}}".format(
+                "r" if r_key else "s",
+                key_width
+            )
+        key_formatter = lambda key: key_format.format(key)
 
-    def __val_formatter(val):
-        return repr(val) if r_val else str(val)
+    if val_formatter is None:
+        val_formatter = lambda val: repr(val) if r_val else str(val)
 
     def __formatter(key):
-        return key_format.format(key) + k_v + __val_formatter(d[key])
+        return key_formatter(key) + k_v + val_formatter(d[key])
 
     return format_list(
         sorted(d.keys()) if sort else d.keys(),
-        start,
-        end,
-        sep,
+        start=start,
+        end=end,
+        sep=sep,
         formatter=__formatter
     )
 
 
-def format_dict_multiline(d, key_width=None, sort=True):
+def format_dict_multiline(d, **kwargs):
     """
     Format a dict into multiple lines.
 
     :type d: dict
     :param d:
-    :type key_width: int
-    :param key_width:
-    :type sort: bool
-    :param sort:
     :rtype: str
     :return:
     """
     return format_dict(
         d,
-        key_width,
-        "{\n\t",
-        "\n}",
-        ": ",
-        ",\n\t",
-        True,
-        True,
-        sort
+        start="{\n\t",
+        end="\n}",
+        k_v=": ",
+        sep=",\n\t",
+        r_key=True,
+        r_val=True,
+        **kwargs
     )
 
 

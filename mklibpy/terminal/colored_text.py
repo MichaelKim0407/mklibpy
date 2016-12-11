@@ -77,13 +77,13 @@ def print_help():
     def __format_dict(d):
         return _collection.format_dict(
             d,
-            4,
-            "    ",
-            "",
-            ": ",
-            "\n    ",
-            True,
-            False
+            start="    ",
+            end="",
+            k_v=": ",
+            sep="\n    ",
+            key_width=4,
+            r_key=True,
+            r_val=False
         )
 
     _COLORS = {

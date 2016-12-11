@@ -40,10 +40,10 @@ class Vector(_collection.StandardList):
     # Formatting
 
     def __repr__(self):
-        return self.__class__.__name__ + " " + _util.collection.format_list(self, "(", ")")
+        return self.__class__.__name__ + " " + _util.collection.format_list(self, start="(", end=")")
 
     def __str__(self):
-        return _util.collection.format_list(self, "", "", " ")
+        return _util.collection.format_list(self, start="", end="", sep=" ")
 
     def __format__(self, spec):
         return self.format(spec).__str__()
