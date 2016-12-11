@@ -2,7 +2,6 @@ import math as _math
 
 import mklibpy.error as _error
 import mklibpy.util as _util
-
 from . import collection as _collection
 
 __author__ = 'Michael'
