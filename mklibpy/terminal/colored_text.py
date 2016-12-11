@@ -1,4 +1,4 @@
-from mklibpy.util.collection import format_dict
+import mklibpy.util.collection as _collection
 
 __author__ = 'Michael'
 
@@ -75,7 +75,7 @@ class ColoredText(object):
 
 def print_help():
     def __format_dict(d):
-        return format_dict(
+        return _collection.format_dict(
             d,
             4,
             "    ",

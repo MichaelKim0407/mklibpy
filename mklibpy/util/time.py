@@ -1,13 +1,13 @@
 from __future__ import absolute_import
 
-import time
+import time as _time
 
 __author__ = 'Michael'
 
 
 def utc_now():
-    return time.gmtime()
+    return _time.gmtime()
 
 
 def to_utc(t_local):
-    return time.gmtime(time.mktime(t_local))
+    return _time.gmtime(_time.mktime(t_local))

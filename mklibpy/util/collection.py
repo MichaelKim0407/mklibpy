@@ -1,4 +1,4 @@
-import mklibpy.error as error
+import mklibpy.error as _error
 
 __author__ = 'Michael'
 
@@ -157,7 +157,7 @@ def to_dict(keys, values):
     :return:
     """
     if len(keys) != len(values):
-        raise error.ValueSetLengthError(keys, values)
+        raise _error.ValueSetLengthError(keys, values)
     d = {}
     for i in range(len(keys)):
         d[keys[i]] = values[i]

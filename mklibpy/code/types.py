@@ -1,6 +1,6 @@
 from __future__ import absolute_import
 
-import types
+import types as _types
 
 __author__ = 'Michael'
 
@@ -13,11 +13,11 @@ def is_class(obj):
 
 
 def is_func(obj):
-    return isinstance(obj, types.FunctionType)
+    return isinstance(obj, _types.FunctionType)
 
 
 def is_method(obj):
-    return isinstance(obj, types.MethodType)
+    return isinstance(obj, _types.MethodType)
 
 
 def is_method_descriptor(obj):

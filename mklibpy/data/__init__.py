@@ -1,4 +1,4 @@
-import mklibpy.util as util
+import mklibpy.util as _util
 
 from . import column
 from . import config
@@ -30,7 +30,7 @@ def load_files(dir_name, ext="", *files, **file_map):
     for fname in file_map:
         file_config_list.append(config.LoadConfig(fname + ext, *file_map[fname]))
     result = Data()
-    with util.path.CD(dir_name):
+    with _util.path.CD(dir_name):
         for file_config in file_config_list:
             result[file_config.var_name] = file_config.load()
     return result

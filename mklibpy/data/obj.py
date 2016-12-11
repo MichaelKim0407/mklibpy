@@ -1,4 +1,4 @@
-import mklibpy.util as util
+import mklibpy.util as _util
 
 __author__ = 'Michael'
 
@@ -32,7 +32,7 @@ class DataObject(object):
     @classmethod
     def load(cls, columns, line):
         values = line.split(cls.Split)
-        return cls(**util.collection.to_dict(columns, values))
+        return cls(**_util.collection.to_dict(columns, values))
 
     def save(self, columns):
         result = ""

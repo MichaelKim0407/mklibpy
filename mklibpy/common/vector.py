@@ -1,14 +1,14 @@
-import math
+import math as _math
 
-import mklibpy.error as error
-import mklibpy.util as util
+import mklibpy.error as _error
+import mklibpy.util as _util
 
-from . import collection
+from . import collection as _collection
 
 __author__ = 'Michael'
 
 
-class Vector(collection.StandardList):
+class Vector(_collection.StandardList):
     """
     The abstract vector class. Please use a subclass.
     All subclasses must have Length specified.
@@ -40,10 +40,10 @@ class Vector(collection.StandardList):
     # Formatting
 
     def __repr__(self):
-        return self.__class__.__name__ + " " + util.collection.format_list(self, "(", ")")
+        return self.__class__.__name__ + " " + _util.collection.format_list(self, "(", ")")
 
     def __str__(self):
-        return util.collection.format_list(self, "", "", " ")
+        return _util.collection.format_list(self, "", "", " ")
 
     def __format__(self, spec):
         return self.format(spec).__str__()
@@ -68,7 +68,7 @@ class Vector(collection.StandardList):
         if not isinstance(other, Vector):
             raise TypeError(other)
         if list.__len__(self) != list.__len__(other):
-            raise error.VectorLengthError(self, other)
+            raise _error.VectorLengthError(self, other)
 
     def __eq__(self, other):
         self.check_length(other)
@@ -190,7 +190,7 @@ class Vector2(Vector):
     AttrNames = {"x": 0, "y": 1}
 
     def angle(self):
-        return math.atan2(self.y, self.x)
+        return _math.atan2(self.y, self.x)
 
 
 Vector2.zero = Vector2.zero_int()
@@ -232,7 +232,7 @@ class Vector3(Vector):
         )
 
     def angle_from(self, other):
-        return math.degrees(math.acos(self * other / (self.length() * other.length)))
+        return _math.degrees(_math.acos(self * other / (self.length() * other.length)))
 
 
 Vector3.zero = Vector3.zero_int()

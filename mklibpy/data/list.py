@@ -1,5 +1,5 @@
-from . import column
-from . import obj
+from . import column as _column
+from . import obj as _obj
 
 __author__ = 'Michael'
 
@@ -21,10 +21,10 @@ class DataList(list):
         if method is None:
             method = lambda x: x[name]
         col = [method(item) for item in self]
-        return column.Column(name, col)
+        return _column.Column(name, col)
 
     @classmethod
-    def load_file(cls, filename, obj_type=obj.DataObject):
+    def load_file(cls, filename, obj_type=_obj.DataObject):
         attr_keys = []
 
         def __load_file():

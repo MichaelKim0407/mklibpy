@@ -1,4 +1,4 @@
-from . import collection
+from . import collection as _collection
 
 __author__ = 'Michael'
 
@@ -32,8 +32,8 @@ class String(str):
             return str.__contains__(self, item)
 
 
-class AnyString(collection.AnyCollection):
-    DEFAULT_LIST_TYPE = collection.typed_list_cls(str)
+class AnyString(_collection.AnyCollection):
+    DEFAULT_LIST_TYPE = _collection.typed_list_cls(str)
 
     def other_startswith(self, other, start=None, end=None):
         return self.call(other.startswith, start=None, end=None)

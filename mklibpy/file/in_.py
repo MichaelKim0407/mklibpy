@@ -1,18 +1,18 @@
+import mklibpy.common.collection as _collection
 import mklibpy.util as _util
-from mklibpy.common.collection import UniqueList as _UniqueList, SequenceDict as _SequenceDict
 
 __author__ = 'Michael'
 
 
 class MultiReader(object):
     def __init__(self, *names):
-        self.__names = _UniqueList(names)  # in __init__, make sure no file is opened twice
+        self.__names = _collection.UniqueList(names)  # in __init__, make sure no file is opened twice
 
-        self.__keys = _UniqueList()  # in __enter__, make sure there are no duplicate keys
+        self.__keys = _collection.UniqueList()  # in __enter__, make sure there are no duplicate keys
         self.__files = {}
 
         self.__fileiters = {}
-        self.__current_lines = _SequenceDict()
+        self.__current_lines = _collection.SequenceDict()
         self.nextline_flags = {}
 
     def __enter__(self):

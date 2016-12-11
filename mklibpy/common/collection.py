@@ -1,6 +1,6 @@
-import mklibpy.code as code
-import mklibpy.error as error
-import mklibpy.util as util
+import mklibpy.code as _code
+import mklibpy.error as _error
+import mklibpy.util as _util
 
 __author__ = 'Michael'
 
@@ -38,8 +38,8 @@ class StandardList(list):
     # --- Code simplification ---
 
     @classmethod
-    @code.decor.make_multipurpose_decor_params(
-        code.clazz.filter_item(code.types.is_func_or_method))
+    @_code.decor.make_multipurpose_decor_params(
+        _code.clazz.filter_item(_code.types.is_func_or_method))
     def convert_params(cls, *names, **kwargs):
         """
         Decorate a function or a class,
@@ -56,8 +56,8 @@ class StandardList(list):
         """
 
         def __wrapper(func):
-            required_args = code.func.get_args(func)
-            default_values = code.func.get_default_values(
+            required_args = _code.func.get_args(func)
+            default_values = _code.func.get_default_values(
                 required_args, func.__defaults__
             )
 
@@ -66,12 +66,12 @@ class StandardList(list):
                     if name in names:
                         _param_map[name] = cls.from_item(_param_map[name], **kwargs)
 
-            if code.types.is_method(func):
+            if _code.types.is_method(func):
                 # required_args.remove("self")
                 required_args.pop(0)
 
                 def new_func(self, *args, **kwargs):
-                    param_map = code.func.get_param_map(
+                    param_map = _code.func.get_param_map(
                         required_args, default_values,
                         args, kwargs
                     )
@@ -79,7 +79,7 @@ class StandardList(list):
                     return func(self, **param_map)
             else:
                 def new_func(*args, **kwargs):
-                    param_map = code.func.get_param_map(
+                    param_map = _code.func.get_param_map(
                         required_args, default_values,
                         args, kwargs
                     )
@@ -121,7 +121,7 @@ class StandardList(list):
 
     # --- list methods ---
 
-    if util.osinfo.PYTHON2:  # list.clear does not exists in Python 2
+    if _util.osinfo.PYTHON2:  # list.clear does not exists in Python 2
         def clear(self):
             self[:] = []
             # or self *= 0
@@ -131,7 +131,7 @@ class StandardList(list):
             cls = self.__class__
         return cls(self)
 
-    if util.osinfo.PYTHON2:  # list.sort in Python 2 & 3 are different
+    if _util.osinfo.PYTHON2:  # list.sort in Python 2 & 3 are different
         def sort(self, key=None, reverse=False):
             list.sort(self, None, key, reverse)
     else:
@@ -223,8 +223,8 @@ def __post_list_call(cls, func):
 
 def __make_list(func):
     def __wrapper(cls):
-        return code.decor.make_class_decor_params(
-            code.clazz.filter_name(lambda name: name not in LIST_METHOD_IGNORE)
+        return _code.decor.make_class_decor_params(
+            _code.clazz.filter_name(lambda name: name not in LIST_METHOD_IGNORE)
         )(__post_list_call)(cls, func)(cls)
 
     return __wrapper
@@ -234,7 +234,7 @@ def __check_unique(l):
     s = set()
     for item in l:
         if item in s:
-            raise error.DuplicateValueError(item)
+            raise _error.DuplicateValueError(item)
         s.add(item)
 
 
@@ -269,7 +269,7 @@ class SequenceDict(object):
             self.__dict[key] = kwargs[key]
 
     def __repr__(self):
-        return util.collection.format_dict(self, sort=False)
+        return _util.collection.format_dict(self, sort=False)
 
     # --- Container methods ---
     # See: https://docs.python.org/3/reference/datamodel.html#emulating-container-types
@@ -492,7 +492,7 @@ class AnyCollection(object):
 
     # --- nonzero: True or False ---
 
-    if util.osinfo.PYTHON2:
+    if _util.osinfo.PYTHON2:
         def __nonzero__(self):
             for obj in self:
                 if obj:

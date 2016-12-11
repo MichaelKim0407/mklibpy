@@ -1,6 +1,7 @@
-import os
+import os as _os
 
-import mklibpy.util as util
+import mklibpy.util as _util
+
 from . import colored_text
 from . import interact
 
@@ -23,9 +24,9 @@ def print_list(l, width, columns):
     return result
 
 
-if util.osinfo.LINUX or util.osinfo.MAC:
+if _util.osinfo.LINUX or _util.osinfo.MAC:
     def clear_screen():
-        os.system("clear")
-elif util.osinfo.WINDOWS:
+        _os.system("clear")
+elif _util.osinfo.WINDOWS:
     def clear_screen():
-        os.system("cls")
+        _os.system("cls")

@@ -1,5 +1,5 @@
-from . import clazz
-from . import types
+from . import clazz as _clazz
+from . import types as _types
 
 __author__ = 'Michael'
 
@@ -50,9 +50,9 @@ def make_class_decor_params(*filters):
     def __wrapper(func_decor):  # The actual wrapper
         def __decor(*args, **kwargs):  # The new decorator
             def __class_wrapper(cls):  # The wrapper of the new decorator
-                for name in clazz.get_all_members(
+                for name in _clazz.get_all_members(
                         cls,
-                        clazz.filter_item(types.is_class_method),
+                        _clazz.filter_item(_types.is_class_method),
                         *filters):
                     func = getattr(cls, name)
                     new_func = func_decor(*args, **kwargs)(func)
@@ -93,9 +93,9 @@ def make_multipurpose_decor_params(*filters):
     def __wrapper(func_decor):  # The actual wrapper
         def __decor(*args, **kwargs):  # The new decorator
             def __inner_wrapper(cls_or_func):  # The wrapper of the new decorator
-                if types.is_class(cls_or_func):
+                if _types.is_class(cls_or_func):
                     return make_class_decor_params(*filters)(func_decor)(*args, **kwargs)(cls_or_func)
-                elif types.is_func_or_method(cls_or_func):
+                elif _types.is_func_or_method(cls_or_func):
                     return func_decor(*args, **kwargs)(cls_or_func)
                 else:
                     return cls_or_func

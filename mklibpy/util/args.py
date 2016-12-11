@@ -1,4 +1,4 @@
-import mklibpy.error as error
+import mklibpy.error as _error
 
 __author__ = 'Michael'
 
@@ -61,7 +61,7 @@ class OptionArgList(list):
 
         def set_flag(arg, args):
             if arg not in self:
-                raise error.InvalidExecutionArgumentError(arg)
+                raise _error.InvalidExecutionArgumentError(arg)
             _arg = self[self.index(arg)]
             trail = args[0:_arg.trail]
             result[_arg.opt_name] = Option(_arg.opt_value, *trail)

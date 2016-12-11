@@ -1,8 +1,8 @@
-import mklibpy.util as util
+import mklibpy.util as _util
 
 __author__ = 'Michael'
 
-if util.osinfo.PYTHON2:
+if _util.osinfo.PYTHON2:
     user_input = raw_input
 else:
     user_input = input
@@ -17,8 +17,8 @@ def y_or_n():
             return False
 
 
-if util.osinfo.WINDOWS:
-    import msvcrt
+if _util.osinfo.WINDOWS:
+    import msvcrt as _msvcrt
 
 
     def getch():
@@ -30,9 +30,9 @@ if util.osinfo.WINDOWS:
         :rtype: str
         :return: The character
         """
-        return msvcrt.getch()
+        return _msvcrt.getch()
 else:
-    import sys, tty, termios
+    import sys as _sys, tty as _tty, termios as _termios
 
 
     def getch():
@@ -44,17 +44,17 @@ else:
         :rtype: str
         :return: The character
         """
-        fd = sys.stdin.fileno()
-        old_settings = termios.tcgetattr(fd)
+        fd = _sys.stdin.fileno()
+        old_settings = _termios.tcgetattr(fd)
         try:
-            tty.setraw(sys.stdin.fileno())
-            ch = sys.stdin.read(1)
+            _tty.setraw(_sys.stdin.fileno())
+            ch = _sys.stdin.read(1)
         finally:
-            termios.tcsetattr(fd, termios.TCSADRAIN, old_settings)
+            _termios.tcsetattr(fd, _termios.TCSADRAIN, old_settings)
         return ch
 
-if util.osinfo.LINUX:
-    import readline
+if _util.osinfo.LINUX:
+    import readline as _readline
 
 
     class TabAutoComplete(object):
@@ -78,9 +78,9 @@ if util.osinfo.LINUX:
         @staticmethod
         def set(*strings):
             if not TabAutoComplete.Bound:
-                readline.parse_and_bind("tab: complete")
+                _readline.parse_and_bind("tab: complete")
                 TabAutoComplete.Bound = True
-            readline.set_completer(TabAutoComplete(*strings).complete)
+            _readline.set_completer(TabAutoComplete(*strings).complete)
 
         @staticmethod
         def tab(text, state):
@@ -92,4 +92,4 @@ if util.osinfo.LINUX:
         @staticmethod
         def unset():
             if TabAutoComplete.Bound:
-                readline.set_completer(TabAutoComplete.tab)
+                _readline.set_completer(TabAutoComplete.tab)

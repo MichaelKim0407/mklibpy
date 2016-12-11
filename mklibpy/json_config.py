@@ -1,12 +1,12 @@
-import json
+import json as _json
 
 __author__ = 'Michael'
 
 
 def format_config(config, make_copy=False, **kwargs):
     if make_copy:
-        import copy
-        config = copy.deepcopy(config)
+        import copy as _copy
+        config = _copy.deepcopy(config)
 
     def is_str(_val):
         return isinstance(_val, str) or isinstance(_val, unicode)
@@ -64,15 +64,15 @@ def format_config(config, make_copy=False, **kwargs):
 
 
 def print_config(config):
-    return json.dumps(config, sort_keys=True, indent=4, separators=(',', ': '))
+    return _json.dumps(config, sort_keys=True, indent=4, separators=(',', ': '))
 
 
 def load_config(file_name):
-    config = json.load(open(file_name))
+    config = _json.load(open(file_name))
     if "config" not in config["input"]:
         config["input"]["config"] = file_name
     return config
 
 
 def save_config(config, file_name):
-    json.dump(config, open(file_name, "w"), sort_keys=True, indent=2, separators=(',', ': '))
+    _json.dump(config, open(file_name, "w"), sort_keys=True, indent=2, separators=(',', ': '))
