@@ -156,7 +156,7 @@ def format_dict(
         return key_formatter(key) + k_v + val_formatter(d[key])
 
     return format_list(
-        sorted(d.keys()) if sort else d.keys(),
+        sorted(d.keys()) if sort else list(d.keys()),
         start=start,
         end=end,
         sep=sep,
