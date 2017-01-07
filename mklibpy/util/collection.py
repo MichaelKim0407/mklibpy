@@ -195,7 +195,7 @@ def to_dict(keys, values):
     :param keys:
     :type values: list
     :param values:
-    :rtype: list
+    :rtype: dict
     :return:
     """
     if len(keys) != len(values):
