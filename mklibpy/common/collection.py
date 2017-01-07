@@ -6,6 +6,12 @@ __author__ = 'Michael'
 
 
 class StandardList(list):
+    def __init__(self, iterable=None):
+        if iterable is None:
+            list.__init__(self)
+        else:
+            list.__init__(self, iterable)
+
     # --- conversions ---
 
     CONVERSION_ACCEPT_LIST = True
@@ -178,6 +184,7 @@ LIST_METHOD_IGNORE = {
     "__eq__",
     "__format__",
     "__ge__",
+    "__getattr__",
     "__getattribute__",
     "__getitem__",
     "__gt__",
@@ -188,6 +195,7 @@ LIST_METHOD_IGNORE = {
     "__mul__",
     "__repr__",
     "__reversed__",
+    "__setattr__",
     "__sizeof__",
     "__str__",
     "clear",
@@ -253,20 +261,22 @@ class SequenceDict(object):
     """
 
     def __init__(self, *args, **kwargs):
-        self.__keys = UniqueList()
-        self.__dict = {}
+        self._keys = UniqueList()
+        self._dict = {}
+        self._init()
 
+    def _init(self, *args, **kwargs):
         for key in args:
-            self.__keys.append(key)
+            self._keys.append(key)
             if key in kwargs:
-                self.__dict[key] = kwargs[key]
+                self._dict[key] = kwargs[key]
             else:
-                self.__dict[key] = None
+                self._dict[key] = None
         for key in kwargs:
             if key in args:
                 continue
-            self.__keys.append(key)
-            self.__dict[key] = kwargs[key]
+            self._keys.append(key)
+            self._dict[key] = kwargs[key]
 
     def __repr__(self):
         return _util.collection.format_dict(self, sort=False)
@@ -275,72 +285,72 @@ class SequenceDict(object):
     # See: https://docs.python.org/3/reference/datamodel.html#emulating-container-types
 
     def __len__(self):
-        return self.__keys.__len__()
+        return self._keys.__len__()
 
     def __getitem__(self, item):
-        return self.__dict.__getitem__(item)
+        return self._dict.__getitem__(item)
 
     def __setitem__(self, key, value):
-        if key not in self.__keys:
-            self.__keys.append(key)
-        self.__dict.__setitem__(key, value)
+        if key not in self._keys:
+            self._keys.append(key)
+        self._dict.__setitem__(key, value)
 
     def __delitem__(self, key):
-        self.__keys.remove(key)
-        self.__dict.__delitem__(key)
+        self._keys.remove(key)
+        self._dict.__delitem__(key)
 
     def __iter__(self):
-        return self.__keys.__iter__()
+        return self._keys.__iter__()
 
     def __reversed__(self):
-        return self.__keys.__reversed__()
+        return self._keys.__reversed__()
 
     def __contains__(self, item):
-        return self.__keys.__contains__(item)
+        return self._keys.__contains__(item)
 
     # --- SequenceDict operations ---
 
     def clear(self):
-        self.__keys.clear()
-        self.__dict.clear()
+        self._keys.clear()
+        self._dict.clear()
 
     def copy(self):
-        return SequenceDict(*self.__keys, **self.__dict)
+        return SequenceDict(*self._keys, **self._dict)
 
     def index(self, value, start=None, stop=None):
         if start is None:
-            return self.__keys.index(value)
+            return self._keys.index(value)
         elif stop is None:
-            return self.__keys.index(value, start)
+            return self._keys.index(value, start)
         else:
-            return self.__keys.index(value, start, stop)
+            return self._keys.index(value, start, stop)
 
     def insert(self, index, key, value):
-        self.__keys.insert(index, key)
+        self._keys.insert(index, key)
         self[key] = value
 
     def keys(self):
-        return list(self.__keys)
+        return list(self._keys)
 
     def pop(self, key):
-        self.__keys.remove(key)
-        return self.__dict.pop(key)
+        self._keys.remove(key)
+        return self._dict.pop(key)
 
     def pop_at(self, index):
-        key = self.__keys.pop(index)
-        val = self.__dict.pop(key)
+        key = self._keys.pop(index)
+        val = self._dict.pop(key)
         return key, val
 
     def reverse(self):
-        self.__keys.reverse()
+        self._keys.reverse()
 
     def sort(self, key=None, reverse=False):
-        self.__keys.sort(key=key, reverse=reverse)
+        self._keys.sort(key=key, reverse=reverse)
 
     def sort_by_value(self, key=None, reverse=False):
         if key is not None:
             key = lambda x: key(self[x])
-        self.__keys.sort(key=key, reverse=reverse)
+        self._keys.sort(key=key, reverse=reverse)
 
     def values(self):
         def __gen():
@@ -544,3 +554,28 @@ for __oper in __MATH_OPERATORS:
     __ANY_COLLECTION_ADD_METHODS.add("__r{}__".format(__oper))
 
 AnyCollection.add_methods(*__ANY_COLLECTION_ADD_METHODS)
+
+
+def __sort(l):
+    l.sort()
+
+
+@__make_list(__sort)
+class SortedList(StandardList):
+    def __init__(self, iterable=None, key=None, reverse=False):
+        StandardList.__init__(self, iterable)
+        self.__key = key
+        self.__reverse = reverse
+
+    def sort(self):
+        StandardList.sort(self, key=self.__key, reverse=self.__reverse)
+
+
+class SortedDict(SequenceDict):
+    def __init__(self, key=None, reverse=False):
+        self._keys = SortedList(key=key, reverse=reverse)
+        self._dict = {}
+
+    def __call__(self, *args, **kwargs):
+        self._init(*args, **kwargs)
+        return self
