@@ -1,6 +1,6 @@
 # mklibpy: A simple Python library
 
-Author: MichaelKim0407 <jinzheng19930407@sina.com>
+Author: [Michael Kim](http://michaelkim0407.com) <jinzheng19930407@sina.com>
 
 ## Installation
 
