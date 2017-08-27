@@ -1,15 +1,13 @@
+# IDE
+.idea/
+
+# Python
 __pycache__/
 *.py[cod]
 
-.idea/
-
-test/
-build/
+# Pip
 dist/
 *.egg-info/
 
-build.sh
-upload.sh
-push-master.sh
-
-wiki/
+# Mac
+.DS_Store

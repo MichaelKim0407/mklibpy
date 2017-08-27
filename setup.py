@@ -20,7 +20,7 @@ setup(
 
     author="Michael Kim",
 
-    author_email="jinzheng19930407@sina.com",
+    author_email="mkim0407@gmail.com",
 
     description="Python library created by Michael Kim",
 
@@ -35,6 +35,7 @@ setup(
         "Programming Language :: Python :: 3.3",
         "Programming Language :: Python :: 3.4",
         "Programming Language :: Python :: 3.5",
+        "Programming Language :: Python :: 3.6",
 
         "Topic :: Software Development :: Libraries"
     ]
