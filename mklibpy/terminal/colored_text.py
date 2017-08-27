@@ -1,3 +1,5 @@
+import re as _re
+
 import mklibpy.util.collection as _collection
 
 __author__ = 'Michael'
@@ -21,6 +23,8 @@ MODES = {
     7: "fill",
     9: "strike"
 }
+
+__switch_reg = _re.compile('\033\[[0-9;]*m')
 
 
 def get_color_code(color):
@@ -59,6 +63,10 @@ def get_text(text, color=None, mode=None):
     return get_switch(color, mode) + text + get_switch()
 
 
+def remove_switch(text):
+    return __switch_reg.sub('', text)
+
+
 class ColoredText(object):
     def __init__(self, text, color=None, mode=None):
         self.text = text
@@ -89,11 +97,11 @@ def print_help():
     _COLORS = {
         c_code: get_text(COLORS[c_code], color=c_code)
         for c_code in COLORS
-        }
+    }
     _MODES = {
         m_code: get_text(MODES[m_code], mode=m_code)
         for m_code in MODES
-        }
+    }
     print("""\
 Usage:
     TEXT [-c COLOR] [-m MODE] [TEXT2 [-c COLOR] [-m MODE] [...]]
