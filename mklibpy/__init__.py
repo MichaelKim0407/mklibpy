@@ -10,4 +10,4 @@ __author__ = 'Michael'
 
 PACKAGES = {util, error, terminal, data, common, code, file}
 
-__version__ = "0.5.2"
+__version__ = "0.6.1"
