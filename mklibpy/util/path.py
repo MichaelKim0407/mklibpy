@@ -48,3 +48,28 @@ def ensure_dir(path):
     """
     path = _os.path.abspath(path)
     ensure_path(_os.path.dirname(path))
+
+
+def recursive(filter=None, dir_filter=None):
+    if filter is None:
+        filter = lambda x: True
+    if dir_filter is None:
+        dir_filter = lambda x: True
+
+    def __decor(func):
+        def __new_func(path):
+            if _os.path.isdir(path):
+                if not dir_filter(path):
+                    return
+                for name in sorted(_os.listdir(path)):
+                    __new_func(_os.path.join(path, name))
+                return
+
+            if not filter(path):
+                return
+
+            func(path)
+
+        return __new_func
+
+    return __decor
