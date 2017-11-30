@@ -18,6 +18,12 @@ setup(
         'mklibpy>={}'.format(VERSION)
     ],
 
+    entry_points={
+        'console_scripts': [
+            'colored=mklibpy_bin.colored:main',
+        ],
+    },
+
     url="https://github.com/MichaelKim0407/mklibpy",
 
     license="MIT",
