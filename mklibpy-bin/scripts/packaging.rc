@@ -1,0 +1,2 @@
+version=$(cat ../VERSION)
+dist="dist/mklibpy-bin-$version.tar.gz"
