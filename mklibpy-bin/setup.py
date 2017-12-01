@@ -21,6 +21,7 @@ setup(
     entry_points={
         'console_scripts': [
             'colored=mklibpy_bin.colored:main',
+            'dates=mklibpy_bin.dates:main',
         ],
     },
 
