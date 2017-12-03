@@ -277,3 +277,19 @@ def first(iterable, match=None):
             if match(item):
                 return item
     return None
+
+
+def for_n(iterable, n):
+    if not isinstance(n, int):
+        raise TypeError("n must be int")
+    if n < 0:
+        raise ValueError("n must be non-negative")
+
+    group = []
+    for item in iterable:
+        group.append(item)
+        if len(group) == n:
+            yield group
+            group = []
+    if group:
+        yield group
