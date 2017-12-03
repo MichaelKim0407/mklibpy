@@ -5,7 +5,7 @@ from setuptools import setup, find_packages
 root_dir = os.path.abspath(os.path.dirname(__file__))
 
 with open(os.path.join(root_dir, "VERSION")) as f:
-    VERSION = f.read().rstrip()
+    VERSION, BASE_VERSION = [line.rstrip() for line in f]
 
 setup(
     name="mklibpy-bin",
@@ -15,7 +15,7 @@ setup(
     packages=find_packages(),
 
     install_requires=[
-        'mklibpy>={}'.format(VERSION)
+        'mklibpy>={}'.format(BASE_VERSION)
     ],
 
     entry_points={
