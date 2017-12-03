@@ -145,33 +145,15 @@ class StandardList(list):
             list.sort(self, key=key, reverse=reverse)
 
     def split(self, size, cls=None, container=None):
-        if not isinstance(size, int):
-            raise TypeError(size)
-        if size <= 0:
-            raise ValueError(size)
-
         if cls is None:
             cls = self.__class__
 
         if container is None:
             container = StandardList
 
-        def __gen():
-            __size = 0
-            __this = cls()
+        iterable = _util.collection.for_n(self, size)
 
-            for item in self:
-                __size += 1
-                __this.append(item)
-                if __size == size:
-                    yield __this
-                    __size = 0
-                    __this = cls()
-
-            if __size > 0:
-                yield __this
-
-        return container(__gen())
+        return container(cls(item) for item in iterable)
 
 
 # We should ignore all methods that does not modify the content of the list,
