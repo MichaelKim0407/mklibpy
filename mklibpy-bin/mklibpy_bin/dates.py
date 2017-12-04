@@ -1,6 +1,8 @@
 import logging
 import os
 
+os.environ['__MKLIBPY_SUPPRESS_DEPRECATION_WARNING'] = '1'
+
 from mklibpy.util.time import iterate_dates
 
 __author__ = 'Michael'
