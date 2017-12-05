@@ -23,6 +23,7 @@ setup(
             'colored=mklibpy_bin.colored:main',
             'dates=mklibpy_bin.dates:main',
             'ls-git=mklibpy_bin.ls_git:main',
+            'pip-upgrade-all=mklibpy_bin.pip_upgrade_all:main',
         ],
     },
 
