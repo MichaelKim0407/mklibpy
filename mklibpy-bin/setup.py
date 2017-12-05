@@ -22,6 +22,7 @@ setup(
         'console_scripts': [
             'colored=mklibpy_bin.colored:main',
             'dates=mklibpy_bin.dates:main',
+            'ls-git=mklibpy_bin.ls_git:main',
         ],
     },
 
