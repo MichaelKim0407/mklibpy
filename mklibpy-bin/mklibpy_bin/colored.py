@@ -1,6 +1,3 @@
-import os
-os.environ['__MKLIBPY_SUPPRESS_DEPRECATION_WARNING'] = '1'
-
 from mklibpy.terminal.colored_text import *
 from mklibpy.util.collection import format_dict
 
