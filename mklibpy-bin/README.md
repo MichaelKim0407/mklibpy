@@ -11,3 +11,31 @@ Although `mklibpy` supports Python 2.7, this executable package only supports Py
 ```
 pip3 install mklibpy-bin
 ```
+
+# List of commands
+
+* `colored`
+
+    Print colored text in the terminal.
+
+    Pass `--help` to see detailed usage.
+
+* `dates`
+
+    Execute a series of commands based on dates.
+
+    Pass `--help` to see detailed usage.
+
+* `ls-git`
+
+    Replace `ls` with `ls-git` and pass arguments as normal.
+
+    If `-l` option is specified, git-branch will be appended if the directory is the root directory of a git repo.
+
+    If in colored mode (`--color` for GNU ls or `-G` for BSD ls), git-branch will also be colored.
+
+* `pip-upgrade-all`
+
+    Upgrade all packages for a `pip` installation.
+
+    Pass `pip` executables as arguments (either /path/to/pip or just pip if it's under $PATH).
