@@ -1,5 +1,5 @@
 import sys
-from subprocess import check_call, check_output, CalledProcessError, DEVNULL
+import subprocess
 
 __author__ = 'Michael'
 
@@ -48,11 +48,11 @@ class Pip(object):
 
     def check_version(self):
         try:
-            out = check_output(
+            out = subprocess.check_output(
                 [self.__path, "--version"],
-                stderr=DEVNULL
+                stderr=subprocess.DEVNULL
             ).decode()
-        except (FileNotFoundError, CalledProcessError):
+        except (FileNotFoundError, subprocess.CalledProcessError):
             raise InvalidPipError(self.__path)
         version = out.split()[1]
         major = int(version.split(".")[0])
@@ -62,11 +62,11 @@ class Pip(object):
     def list_outdated(self):
         def __yield():
             try:
-                out = check_output(
+                out = subprocess.check_output(
                     [self.__path, "list", "--outdated"],
-                    stderr=DEVNULL
+                    stderr=subprocess.DEVNULL
                 ).decode()
-            except CalledProcessError:
+            except subprocess.CalledProcessError:
                 raise InvalidPipError(self.__path)
             for line in out.splitlines()[2:]:
                 line = line.strip()
@@ -82,12 +82,12 @@ class Pip(object):
         if packages is None:
             packages = self.__outdated
         try:
-            check_call(
+            subprocess.check_call(
                 [self.__path, "install", "-U"] + packages,
                 stdout=sys.stdout,
                 stderr=sys.stderr
             )
-        except CalledProcessError as e:
+        except subprocess.CalledProcessError as e:
             raise UpgradeFailed(e.returncode)
 
     def all(self):
