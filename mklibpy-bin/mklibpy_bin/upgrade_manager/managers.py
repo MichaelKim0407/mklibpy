@@ -1,6 +1,8 @@
 import re
 import subprocess
 
+from cached_property import timed_cached_property
+
 from . import Manager
 
 __author__ = 'Michael'
@@ -13,21 +15,30 @@ class AptManager(Manager):
     def __init__(self, apt='apt'):
         self.apt = apt
 
-    def check(self):
-        out = subprocess.check_output(
+    @timed_cached_property(ttl=60)
+    def __update(self):
+        return subprocess.check_output(
             [self.apt, 'update'],
             stderr=subprocess.DEVNULL
         ).decode()
+
+    def update(self):
+        return self.__update
+
+    def check(self):
+        out = self.update()
         if self.UP_TO_DATE in out:
             return 0
         return int(self.CHECK_REGEX.findall(out)[0])
 
     def list(self):
+        self.update()
         subprocess.check_call(
             [self.apt, 'list', '--upgradable']
         )
 
     def run(self):
+        self.update()
         subprocess.check_call(
             [self.apt, 'upgrade', '-y']
         )
@@ -37,11 +48,15 @@ class BrewManager(Manager):
     def __init__(self, brew='brew'):
         self.brew = brew
 
-    def update(self):
+    @timed_cached_property(ttl=60)
+    def __update(self):
         subprocess.check_call(
             [self.brew, 'update'],
             stdout=subprocess.DEVNULL
         )
+
+    def update(self):
+        return self.__update
 
     def check(self):
         self.update()
@@ -51,11 +66,13 @@ class BrewManager(Manager):
         return len(out.splitlines())
 
     def list(self):
+        self.update()
         subprocess.check_call(
             [self.brew, 'outdated']
         )
 
     def run(self):
+        self.update()
         subprocess.check_call(
             [self.brew, 'upgrade']
         )
@@ -74,11 +91,13 @@ class CaskManager(BrewManager):
         return len(out.splitlines())
 
     def list(self):
+        self.update()
         subprocess.check_call(
             [self.brew, self.cask, 'outdated']
         )
 
     def run(self):
+        self.update()
         subprocess.check_call(
             [self.brew, self.cask, 'upgrade']
         )

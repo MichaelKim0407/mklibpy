@@ -1,7 +1,7 @@
 import subprocess
 import sys
 
-from cached_property import cached_property
+from cached_property import cached_property, timed_cached_property
 
 __author__ = 'Michael'
 
@@ -47,7 +47,7 @@ class Pip(object):
         major = int(version.split(".")[0])
         return major < PIP_LIST_FORMAT_VERSION
 
-    @cached_property
+    @timed_cached_property(ttl=60)
     def outdated(self):
         def __yield():
             try:
