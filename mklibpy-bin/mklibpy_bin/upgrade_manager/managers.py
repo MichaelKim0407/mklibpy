@@ -71,16 +71,11 @@ class CaskManager(BrewManager):
 
 class PipManager(Manager):
     def __init__(self, pip='pip'):
-        self.pip = pip
+        from mklibpy_bin.pip_upgrade_all import Pip
+        self.pip = Pip(pip)
 
     def check(self):
-        out = subprocess.check_output(
-            [self.pip, 'list', '--outdated']
-        ).decode()
-        if not out:
-            return 0
-        return len(out.splitlines()) - 2
+        return len(self.pip.outdated)
 
     def run(self):
-        from mklibpy_bin.pip_upgrade_all import Pip
-        Pip(self.pip).all()
+        self.pip.upgrade()
