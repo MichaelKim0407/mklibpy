@@ -1,6 +1,8 @@
 import subprocess
 import sys
 
+from cached_property import cached_property
+
 __author__ = 'Michael'
 
 PIP_LIST_FORMAT_VERSION = 9
@@ -31,9 +33,8 @@ class UpgradeFailed(PipUpgradeError):
 class Pip(object):
     def __init__(self, path):
         self.__path = path
-        self.__outdated = []
 
-    @property
+    @cached_property
     def legacy(self):
         try:
             out = subprocess.check_output(
@@ -46,7 +47,8 @@ class Pip(object):
         major = int(version.split(".")[0])
         return major < PIP_LIST_FORMAT_VERSION
 
-    def list_outdated(self):
+    @cached_property
+    def outdated(self):
         def __yield():
             try:
                 cmd = [self.__path, "list", "--outdated"]
@@ -65,12 +67,11 @@ class Pip(object):
                 name = line.split()[0]
                 yield name
 
-        self.__outdated = list(__yield())
-        return self.__outdated
+        return list(__yield())
 
     def upgrade(self, packages=None):
         if packages is None:
-            packages = self.__outdated
+            packages = self.outdated
         try:
             subprocess.check_call(
                 [self.__path, "install", "-U"] + packages,
@@ -82,11 +83,10 @@ class Pip(object):
 
     def all(self):
         print("--- Upgrading all packages for '{}' ---".format(self.__path))
-        self.list_outdated()
-        print("{} package(s) need to be upgraded".format(len(self.__outdated)))
-        if not self.__outdated:
+        print("{} package(s) need to be upgraded".format(len(self.outdated)))
+        if not self.outdated:
             return
-        print("They are: {}".format(self.__outdated))
+        print("They are: {}".format(self.outdated))
 
         print("Upgrading all packages...")
         self.upgrade()

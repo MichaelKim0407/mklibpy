@@ -15,7 +15,8 @@ setup(
     packages=find_packages(),
 
     install_requires=[
-        'mklibpy>={}'.format(BASE_VERSION)
+        'mklibpy>={}'.format(BASE_VERSION),
+        'cached-property',
     ],
 
     entry_points={
