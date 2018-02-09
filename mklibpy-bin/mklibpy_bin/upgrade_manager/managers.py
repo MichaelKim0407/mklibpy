@@ -22,6 +22,11 @@ class AptManager(Manager):
             return 0
         return int(self.CHECK_REGEX.findall(out)[0])
 
+    def list(self):
+        subprocess.check_call(
+            [self.apt, 'list', '--upgradable']
+        )
+
     def run(self):
         subprocess.check_call(
             [self.apt, 'upgrade', '-y']
@@ -45,6 +50,11 @@ class BrewManager(Manager):
         ).decode()
         return len(out.splitlines())
 
+    def list(self):
+        subprocess.check_call(
+            [self.brew, 'outdated']
+        )
+
     def run(self):
         subprocess.check_call(
             [self.brew, 'upgrade']
@@ -63,6 +73,11 @@ class CaskManager(BrewManager):
         ).decode()
         return len(out.splitlines())
 
+    def list(self):
+        subprocess.check_call(
+            [self.brew, self.cask, 'outdated']
+        )
+
     def run(self):
         subprocess.check_call(
             [self.brew, self.cask, 'upgrade']
@@ -76,6 +91,11 @@ class PipManager(Manager):
 
     def check(self):
         return len(self.pip.outdated)
+
+    def list(self):
+        subprocess.call(
+            [self.pip.path, 'list', '--outdated']
+        )
 
     def run(self):
         self.pip.upgrade()

@@ -32,17 +32,17 @@ class UpgradeFailed(PipUpgradeError):
 
 class Pip(object):
     def __init__(self, path):
-        self.__path = path
+        self.path = path
 
     @cached_property
     def legacy(self):
         try:
             out = subprocess.check_output(
-                [self.__path, "--version"],
+                [self.path, "--version"],
                 stderr=subprocess.DEVNULL
             ).decode()
         except (FileNotFoundError, subprocess.CalledProcessError):
-            raise InvalidPipError(self.__path)
+            raise InvalidPipError(self.path)
         version = out.split()[1]
         major = int(version.split(".")[0])
         return major < PIP_LIST_FORMAT_VERSION
@@ -51,7 +51,7 @@ class Pip(object):
     def outdated(self):
         def __yield():
             try:
-                cmd = [self.__path, "list", "--outdated"]
+                cmd = [self.path, "list", "--outdated"]
                 if not self.legacy:
                     cmd += ['--format=legacy']
                 out = subprocess.check_output(
@@ -59,7 +59,7 @@ class Pip(object):
                     stderr=subprocess.DEVNULL
                 ).decode()
             except subprocess.CalledProcessError:
-                raise InvalidPipError(self.__path)
+                raise InvalidPipError(self.path)
             for line in out.splitlines():
                 line = line.strip()
                 if not line:
@@ -74,7 +74,7 @@ class Pip(object):
             packages = self.outdated
         try:
             subprocess.check_call(
-                [self.__path, "install", "-U"] + packages,
+                [self.path, "install", "-U"] + packages,
                 stdout=sys.stdout,
                 stderr=sys.stderr
             )
@@ -82,7 +82,7 @@ class Pip(object):
             raise UpgradeFailed(e.returncode)
 
     def all(self):
-        print("--- Upgrading all packages for '{}' ---".format(self.__path))
+        print("--- Upgrading all packages for '{}' ---".format(self.path))
         print("{} package(s) need to be upgraded".format(len(self.outdated)))
         if not self.outdated:
             return
