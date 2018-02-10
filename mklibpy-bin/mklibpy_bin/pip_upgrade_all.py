@@ -94,7 +94,7 @@ class Pip(object):
 
 
 def main(args=None):
-    if not args:
+    if args is None:
         args = sys.argv[1:]
 
     for pip in args:
