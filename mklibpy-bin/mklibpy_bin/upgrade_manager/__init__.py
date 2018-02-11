@@ -25,7 +25,9 @@ def get_config_path():
     ensure_dir(path)
     if not os.path.exists(path):
         with open(path, 'w') as f:
-            f.write('managers = {}\n')
+            f.write('''from mklibpy.common.collection import SequenceDict
+managers = SequenceDict()
+''')
     return path
 
 
@@ -53,7 +55,7 @@ def main():
     arg_parser.add_argument(
         'managers', nargs='*',
         help='''Specify upgrade managers, or leave empty for all.
-Configured managers: {}'''.format(list(managers)))
+Configured managers: {}'''.format(managers.keys()))
 
     args = arg_parser.parse_args()
 
