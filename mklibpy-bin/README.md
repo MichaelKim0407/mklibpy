@@ -39,3 +39,13 @@ pip3 install mklibpy-bin
     Upgrade all packages for a `pip` installation.
 
     Pass `pip` executables as arguments (either /path/to/pip or just pip if it's under $PATH).
+
+* `upgrade`
+
+    Manage upgrades on your environment.
+
+    Builtin managers for `apt`, `brew`, `brew cask`, `pip2` and `pip3`.
+
+    Supports virtualenv.
+
+    You can also write your own managers in the configuration file, found at `~/.upgrade-manager/config.py` or `$VIRTUAL_ENV/.upgrade-manager.config.py`.

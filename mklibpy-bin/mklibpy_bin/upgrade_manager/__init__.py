@@ -89,6 +89,25 @@ Builtin managers (can add): {}'''.format(managers.keys(), sorted(builtins)))
             add(name)
         return
 
+    if not args.managers:
+        args.managers = managers.keys()
+    for name in args.managers:
+        if name not in managers:
+            print("'{}' is not a configured manager".format(name), file=sys.stderr)
+            continue
+        manager = managers[name]
+        if args.command == 'check':
+            sys.stdout.write("'{}' has ...".format(name))
+            sys.stdout.flush()
+            n = manager.check()
+            sys.stdout.write("\10\10\10{} upgrade(s).\n".format(n))
+        elif args.command == 'list':
+            print("Listing upgrades for '{}'...".format(name))
+            manager.list()
+        elif args.command == 'run':
+            print("Upgrading '{}'...".format(name))
+            manager.run()
+
 
 if __name__ == '__main__':
     main()
