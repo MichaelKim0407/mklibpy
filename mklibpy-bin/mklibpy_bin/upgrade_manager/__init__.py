@@ -1,4 +1,5 @@
 import os
+import sys
 
 from mklibpy.util.path import ensure_dir
 
@@ -14,6 +15,9 @@ class Manager(object):
 
     def run(self):
         raise NotImplementedError
+
+
+from .managers import builtins
 
 
 def get_config_path():
@@ -41,6 +45,23 @@ def load_config(path=None):
     return vars['managers']
 
 
+def add(name, config_path=None):
+    if config_path is None:
+        config_path = get_config_path()
+
+    builtin = builtins[name]
+    cls = builtin[0]
+    args = builtin[1:]
+
+    with open(config_path, 'a') as f:
+        f.write("""
+### Added from builtin managers ###
+from {module} import {cls}
+managers['{name}'] = {cls}{args}
+######
+""".format(name=name, module=cls.__module__, cls=cls.__name__, args=args))
+
+
 def main():
     managers = load_config()
 
@@ -55,9 +76,18 @@ def main():
     arg_parser.add_argument(
         'managers', nargs='*',
         help='''Specify upgrade managers, or leave empty for all.
-Configured managers: {}'''.format(managers.keys()))
+Configured managers: {};
+Builtin managers (can add): {}'''.format(managers.keys(), sorted(builtins)))
 
     args = arg_parser.parse_args()
+
+    if args.command == 'add':
+        for name in args.managers:
+            if name not in builtins:
+                print("'{}' is not a builtin manager".format(name), file=sys.stderr)
+                continue
+            add(name)
+        return
 
 
 if __name__ == '__main__':

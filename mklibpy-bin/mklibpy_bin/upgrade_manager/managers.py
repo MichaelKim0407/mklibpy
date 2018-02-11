@@ -118,3 +118,12 @@ class PipManager(Manager):
 
     def run(self):
         self.pip.upgrade()
+
+
+builtins = {
+    'pip2': (PipManager, 'pip2'),
+    'pip3': (PipManager, 'pip3'),
+    'apt': (AptManager,),
+    'brew': (BrewManager,),
+    'cask': (CaskManager,),
+}
