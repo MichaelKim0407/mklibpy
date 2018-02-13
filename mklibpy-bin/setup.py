@@ -15,7 +15,8 @@ setup(
     packages=find_packages(),
 
     install_requires=[
-        'mklibpy>={}'.format(BASE_VERSION)
+        'mklibpy>={}'.format(BASE_VERSION),
+        'cached-property',
     ],
 
     entry_points={
@@ -24,6 +25,7 @@ setup(
             'dates=mklibpy_bin.dates:main',
             'ls-git=mklibpy_bin.ls_git:main',
             'pip-upgrade-all=mklibpy_bin.pip_upgrade_all:main',
+            'upgrade=mklibpy_bin.upgrade_manager:main',
         ],
     },
 

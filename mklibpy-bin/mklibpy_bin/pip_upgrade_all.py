@@ -1,9 +1,11 @@
+import subprocess
 import sys
-from subprocess import check_call, check_output, CalledProcessError, DEVNULL
+
+from cached_property import cached_property, timed_cached_property
 
 __author__ = 'Michael'
 
-PIP_MIN_VERSION = 9
+PIP_LIST_FORMAT_VERSION = 9
 
 
 class PipUpgradeError(Exception):
@@ -18,19 +20,6 @@ class InvalidPipError(PipUpgradeError):
         return "'{}' is not a valid pip executable".format(self.path)
 
 
-class PipVersionError(PipUpgradeError):
-    def __init__(self, path, version):
-        self.path = path
-        self.version = version
-
-    def __str__(self):
-        return "'{}' version is {}; at least {} is required".format(
-            self.path,
-            self.version,
-            PIP_MIN_VERSION
-        )
-
-
 class UpgradeFailed(PipUpgradeError):
     def __init__(self, code):
         self.code = code
@@ -43,62 +32,61 @@ class UpgradeFailed(PipUpgradeError):
 
 class Pip(object):
     def __init__(self, path):
-        self.__path = path
-        self.__outdated = []
+        self.path = path
 
-    def check_version(self):
+    @cached_property
+    def legacy(self):
         try:
-            out = check_output(
-                [self.__path, "--version"],
-                stderr=DEVNULL
+            out = subprocess.check_output(
+                [self.path, "--version"],
+                stderr=subprocess.DEVNULL
             ).decode()
-        except (FileNotFoundError, CalledProcessError):
-            raise InvalidPipError(self.__path)
+        except (FileNotFoundError, subprocess.CalledProcessError):
+            raise InvalidPipError(self.path)
         version = out.split()[1]
         major = int(version.split(".")[0])
-        if major < PIP_MIN_VERSION:
-            raise PipVersionError(self.__path, version)
+        return major < PIP_LIST_FORMAT_VERSION
 
-    def list_outdated(self):
+    @timed_cached_property(ttl=60)
+    def outdated(self):
         def __yield():
             try:
-                out = check_output(
-                    [self.__path, "list", "--outdated"],
-                    stderr=DEVNULL
+                cmd = [self.path, "list", "--outdated"]
+                if not self.legacy:
+                    cmd += ['--format=legacy']
+                out = subprocess.check_output(
+                    cmd,
+                    stderr=subprocess.DEVNULL
                 ).decode()
-            except CalledProcessError:
-                raise InvalidPipError(self.__path)
-            for line in out.splitlines()[2:]:
+            except subprocess.CalledProcessError:
+                raise InvalidPipError(self.path)
+            for line in out.splitlines():
                 line = line.strip()
                 if not line:
                     continue
                 name = line.split()[0]
                 yield name
 
-        self.__outdated = list(__yield())
-        return self.__outdated
+        return list(__yield())
 
     def upgrade(self, packages=None):
         if packages is None:
-            packages = self.__outdated
+            packages = self.outdated
         try:
-            check_call(
-                [self.__path, "install", "-U"] + packages,
+            subprocess.check_call(
+                [self.path, "install", "-U"] + packages,
                 stdout=sys.stdout,
                 stderr=sys.stderr
             )
-        except CalledProcessError as e:
+        except subprocess.CalledProcessError as e:
             raise UpgradeFailed(e.returncode)
 
     def all(self):
-        print("--- Upgrading all packages for '{}' ---".format(self.__path))
-        self.check_version()
-
-        self.list_outdated()
-        print("{} package(s) need to be upgraded".format(len(self.__outdated)))
-        if not self.__outdated:
+        print("--- Upgrading all packages for '{}' ---".format(self.path))
+        print("{} package(s) need to be upgraded".format(len(self.outdated)))
+        if not self.outdated:
             return
-        print("They are: {}".format(self.__outdated))
+        print("They are: {}".format(self.outdated))
 
         print("Upgrading all packages...")
         self.upgrade()
@@ -106,7 +94,7 @@ class Pip(object):
 
 
 def main(args=None):
-    if not args:
+    if args is None:
         args = sys.argv[1:]
 
     for pip in args:

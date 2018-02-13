@@ -2,6 +2,8 @@ import os
 import subprocess
 import sys
 
+from cached_property import cached_property
+
 try:
     import pty
 except ImportError:
@@ -67,11 +69,11 @@ class LsGit(object):
         if stdout is None:
             self.stdout = sys.stdout
 
-    @property
+    @cached_property
     def is_tty(self):
         return self.stdout.isatty()
 
-    @property
+    @cached_property
     def is_gnu(self):
         try:
             system_call(['ls', '--version'], stderr=subprocess.DEVNULL)
@@ -117,11 +119,11 @@ class LsGitProcess(object):
             if not arg.startswith('-')
         ]
 
-    @property
+    @cached_property
     def _l(self):
         return 'l' in self.__flags
 
-    @property
+    @cached_property
     def __color(self):
         if self.__parent.is_gnu:
             if not self.__options.startswith('--color'):
