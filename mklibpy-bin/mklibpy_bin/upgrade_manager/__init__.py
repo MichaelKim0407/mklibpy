@@ -1,9 +1,12 @@
 import os
 import sys
+import time
 
 from mklibpy.util.path import ensure_dir
 
 __author__ = 'Michael'
+
+TIME_FORMAT = '%Y-%m-%d %H:%M'
 
 
 class Manager(object):
@@ -20,18 +23,28 @@ class Manager(object):
 from .managers import builtins
 
 
-def get_config_path():
+def get_base_dir():
     if 'VIRTUAL_ENV' in os.environ:
         path = os.environ['VIRTUAL_ENV']
     else:
         path = os.path.expanduser('~')
-    path = os.path.join(path, '.upgrade-manager', 'config.py')
+    return os.path.join(path, '.upgrade-manager')
+
+
+def get_config_path():
+    path = os.path.join(get_base_dir(), 'config.py')
     ensure_dir(path)
     if not os.path.exists(path):
         with open(path, 'w') as f:
             f.write('''from mklibpy.common.collection import SequenceDict
 managers = SequenceDict()
 ''')
+    return path
+
+
+def get_result_path(name):
+    path = os.path.join(get_base_dir(), 'results', name)
+    ensure_dir(path)
     return path
 
 
@@ -67,12 +80,17 @@ def main():
 
     import argparse
 
-    arg_parser = argparse.ArgumentParser()
+    arg_parser = argparse.ArgumentParser(formatter_class=argparse.RawTextHelpFormatter)
 
     arg_parser.add_argument(
         'command',
-        choices=['check', 'list', 'run', 'add'],
-        help='')
+        choices=['check', 'show', 'list', 'run', 'add'],
+        help='''check = check for upgrades;
+show = show number of upgrades as of last check;
+list = list upgrades;
+run = upgrade;
+add = add builtin manager(s)
+''')
     arg_parser.add_argument(
         'managers', nargs='*',
         help='''Specify upgrade managers, or leave empty for all.
@@ -101,6 +119,13 @@ Builtin managers (can add): {}'''.format(managers.keys(), sorted(builtins)))
             sys.stdout.flush()
             n = manager.check()
             sys.stdout.write("\10\10\10{} upgrade(s).\n".format(n))
+            with open(get_result_path(name), 'w') as f:
+                f.write("'{}' has {} upgrade(s). ({})\n".format(
+                    name, n, time.strftime(TIME_FORMAT)
+                ))
+        elif args.command == 'show':
+            with open(get_result_path(name)) as f:
+                print(f.read().strip())
         elif args.command == 'list':
             print("Listing upgrades for '{}'...".format(name))
             manager.list()
