@@ -80,12 +80,17 @@ def main():
 
     import argparse
 
-    arg_parser = argparse.ArgumentParser()
+    arg_parser = argparse.ArgumentParser(formatter_class=argparse.RawTextHelpFormatter)
 
     arg_parser.add_argument(
         'command',
         choices=['check', 'show', 'list', 'run', 'add'],
-        help='')
+        help='''check = check for upgrades;
+show = show number of upgrades as of last check;
+list = list upgrades;
+run = upgrade;
+add = add builtin manager(s)
+''')
     arg_parser.add_argument(
         'managers', nargs='*',
         help='''Specify upgrade managers, or leave empty for all.
