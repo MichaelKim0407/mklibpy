@@ -84,7 +84,7 @@ def main():
 
     arg_parser.add_argument(
         'command',
-        choices=['check', 'list', 'run', 'add'],
+        choices=['check', 'show', 'list', 'run', 'add'],
         help='')
     arg_parser.add_argument(
         'managers', nargs='*',
@@ -118,6 +118,9 @@ Builtin managers (can add): {}'''.format(managers.keys(), sorted(builtins)))
                 f.write("'{}' has {} upgrade(s). ({})\n".format(
                     name, n, time.strftime(TIME_FORMAT)
                 ))
+        elif args.command == 'show':
+            with open(get_result_path(name)) as f:
+                print(f.read().strip())
         elif args.command == 'list':
             print("Listing upgrades for '{}'...".format(name))
             manager.list()
