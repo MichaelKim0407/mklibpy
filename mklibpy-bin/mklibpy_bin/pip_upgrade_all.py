@@ -72,6 +72,8 @@ class Pip(object):
     def upgrade(self, packages=None):
         if packages is None:
             packages = self.outdated
+        if not packages:
+            return
         try:
             subprocess.check_call(
                 [self.path, "install", "-U"] + packages,
