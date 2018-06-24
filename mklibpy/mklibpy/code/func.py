@@ -23,6 +23,9 @@ class FuncArgs(object):
             for i in range(self.count_default):
                 self.defaults[self.args[self.count_required + i]] = func.__defaults__[i]
 
+    def __iter__(self):
+        return iter(self.args)
+
     def push_no_extend(self, *args, **kwargs):
         if len(args) > self.count:
             raise TypeError("Too many positional arguments.")
