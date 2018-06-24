@@ -19,11 +19,11 @@ class StandardList(list):
 
     @classmethod
     def from_list(cls, obj):
-        return cls(*obj)
+        return cls(obj)
 
     @classmethod
     def from_tuple(cls, obj):
-        return cls(*obj)
+        return cls(obj)
 
     @classmethod
     def from_item(cls, obj, accept_list=None, accept_tuple=None):

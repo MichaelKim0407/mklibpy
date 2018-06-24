@@ -15,6 +15,14 @@ class Vector(_collection.StandardList):
     CONVERSION_ACCEPT_LIST = False
     CONVERSION_ACCEPT_TUPLE = True
 
+    @classmethod
+    def from_list(cls, obj, **kwargs):
+        return cls(*obj, **kwargs)
+
+    @classmethod
+    def from_tuple(cls, obj, **kwargs):
+        return cls(*obj, **kwargs)
+
     Length = None
     AttrNames = {}
 
