@@ -1,5 +1,5 @@
-import mklibpy.common.collection as _collection
-import mklibpy.util as _util
+from .. import util as _util
+from ..common import collection as _collection
 
 __author__ = 'Michael'
 

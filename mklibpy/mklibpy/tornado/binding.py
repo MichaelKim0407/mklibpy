@@ -51,12 +51,10 @@ class UrlBindings(object):
         methods[method] = func
 
     @staticmethod
-    def __gen_method(func, __params):
-        _params = __params[func]
+    def __gen_method(func):
+        def __method(self: _web.RequestHandler):
+            val = func(self)
 
-        def __method(self):
-            params = _params.parse(self)
-            val = func(**params)
             if val is None:
                 return
             if isinstance(val, str):
@@ -98,7 +96,7 @@ class UrlBindings(object):
 
         return __method
 
-    def get_handlers(self, params):
+    def get_handlers(self):
         handlers = []
         for url in self.__bindings:
             methods = self.__bindings[url]
@@ -119,9 +117,9 @@ class UrlBindings(object):
                     return os.getcwd()
 
             if get_method is not None:
-                __NewHandler.get = UrlBindings.__gen_method(get_method, params)
+                __NewHandler.get = UrlBindings.__gen_method(get_method)
             if post_method is not None:
-                __NewHandler.post = UrlBindings.__gen_method(post_method, params)
+                __NewHandler.post = UrlBindings.__gen_method(post_method)
 
             handlers.append((url, __NewHandler))
 

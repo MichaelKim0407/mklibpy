@@ -1,8 +1,8 @@
 import math as _math
 
-import mklibpy.error as _error
-import mklibpy.util as _util
 from . import collection as _collection
+from .. import error as _error
+from .. import util as _util
 
 __author__ = 'Michael'
 
@@ -14,6 +14,14 @@ class Vector(_collection.StandardList):
     """
     CONVERSION_ACCEPT_LIST = False
     CONVERSION_ACCEPT_TUPLE = True
+
+    @classmethod
+    def from_list(cls, obj, **kwargs):
+        return cls(*obj, **kwargs)
+
+    @classmethod
+    def from_tuple(cls, obj, **kwargs):
+        return cls(*obj, **kwargs)
 
     Length = None
     AttrNames = {}

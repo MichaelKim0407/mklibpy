@@ -1,6 +1,8 @@
 import django.http as _http
 from django.shortcuts import render as _render
 
+from .. import code as _code
+
 __author__ = 'Michael'
 
 
@@ -45,11 +47,14 @@ def __get_parameters(params_def, provider):
     return parameters
 
 
-def view(pass_request=False, **kwargs):
+def view(pass_request=None, **kwargs):
     """
     Decorate a function with named parameters, rewriting it as a view.
 
-    :param pass_request: Whether `request` should be passed as the first argument.
+    :param pass_request:
+        If None, do not pass `request`;
+        If True, pass `request` into 'request' argument;
+        If str, the named argument to pass `request` into.
     :param kwargs:
         Specify types for parameters.
         Unspecified parameters will have the default type `str`.
@@ -62,20 +67,24 @@ def view(pass_request=False, **kwargs):
         name is the value of request param `name`
         x is the int value of request param `x`
     """
+    if pass_request is True:
+        pass_request = 'request'
 
     def __decor(func):
-        params = __get_params_def(func, kwargs, 1 if pass_request else 0)
+        args = _code.func.FuncArgs(func)
 
         def __view(request):
-            d = getattr(request, request.method)
-            parameters = __get_parameters(params, d)
-
+            d = getattr(request, request.method).copy()
             if pass_request:
-                result = func(request, **parameters)
-            else:
-                result = func(**parameters)
+                d[pass_request] = request
 
-            return result
+            params = args.push(**d)
+            for param in kwargs:
+                if param not in params:
+                    continue
+                params[param] = kwargs[param](params[param])
+
+            return func(**params)
 
         return __view
 

@@ -1,6 +1,6 @@
-import mklibpy.code as _code
-import mklibpy.error as _error
-import mklibpy.util as _util
+from .. import code as _code
+from .. import error as _error
+from .. import util as _util
 
 __author__ = 'Michael'
 
@@ -19,11 +19,11 @@ class StandardList(list):
 
     @classmethod
     def from_list(cls, obj):
-        return cls(*obj)
+        return cls(obj)
 
     @classmethod
     def from_tuple(cls, obj):
-        return cls(*obj)
+        return cls(obj)
 
     @classmethod
     def from_item(cls, obj, accept_list=None, accept_tuple=None):
@@ -61,11 +61,8 @@ class StandardList(list):
         :return: @decorator
         """
 
-        def __wrapper(func):
-            required_args = _code.func.get_args(func)
-            default_values = _code.func.get_default_values(
-                required_args, func.__defaults__
-            )
+        def __decor(func):
+            func_args = _code.func.FuncArgs(func)
 
             def __convert(_param_map):
                 for name in _param_map:
@@ -73,28 +70,19 @@ class StandardList(list):
                         _param_map[name] = cls.from_item(_param_map[name], **kwargs)
 
             if _code.types.is_method(func):
-                # required_args.remove("self")
-                required_args.pop(0)
-
                 def new_func(self, *args, **kwargs):
-                    param_map = _code.func.get_param_map(
-                        required_args, default_values,
-                        args, kwargs
-                    )
+                    param_map = func_args.push(*args, **kwargs)
                     __convert(param_map)
                     return func(self, **param_map)
             else:
                 def new_func(*args, **kwargs):
-                    param_map = _code.func.get_param_map(
-                        required_args, default_values,
-                        args, kwargs
-                    )
+                    param_map = func_args.push(*args, **kwargs)
                     __convert(param_map)
                     return func(**param_map)
 
             return new_func
 
-        return __wrapper
+        return __decor
 
     @classmethod
     def convert_attr(cls, *names, **kwargs):
@@ -112,7 +100,7 @@ class StandardList(list):
         :return: @decorator
         """
 
-        def __wrapper(decorated_cls):
+        def __decor(decorated_cls):
             __setattr = decorated_cls.__setattr__
 
             def new_setattr(self, key, value):
@@ -123,7 +111,7 @@ class StandardList(list):
             setattr(decorated_cls, "__setattr__", new_setattr)
             return decorated_cls
 
-        return __wrapper
+        return __decor
 
     # --- list methods ---
 
@@ -192,7 +180,7 @@ LIST_METHOD_IGNORE = {
 
 
 def __post_list_call(cls, func):
-    def __wrapper(method):
+    def __decor(method):
         def __new_method(*args, **kwargs):
             if args and isinstance(args[0], cls):
                 __backup = list(args[0])
@@ -208,16 +196,16 @@ def __post_list_call(cls, func):
 
         return __new_method
 
-    return __wrapper
+    return __decor
 
 
 def __make_list(func):
-    def __wrapper(cls):
+    def __decor(cls):
         return _code.decor.make_class_decor_params(
             _code.clazz.filter_name(lambda name: name not in LIST_METHOD_IGNORE)
         )(__post_list_call)(cls, func)(cls)
 
-    return __wrapper
+    return __decor
 
 
 def __check_unique(l):
