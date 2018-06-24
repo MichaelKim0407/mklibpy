@@ -23,7 +23,7 @@ class FuncArgs(object):
             for i in range(self.count_default):
                 self.defaults[self.args[self.count_required + i]] = func.__defaults__[i]
 
-    def push(self, *args, **kwargs):
+    def push_no_extend(self, *args, **kwargs):
         if len(args) > self.count:
             raise TypeError("Too many positional arguments.")
 
@@ -38,6 +38,11 @@ class FuncArgs(object):
                 param_map[arg_name] = self.defaults[arg_name]
             else:
                 raise TypeError("Missing positional argument '{}'".format(arg_name))
+
+        return param_map
+
+    def push(self, *args, **kwargs):
+        param_map = self.push_no_extend(*args, **kwargs)
 
         for arg_name in kwargs:
             param_map[arg_name] = kwargs[arg_name]
