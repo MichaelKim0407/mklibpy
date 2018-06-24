@@ -28,10 +28,7 @@ def make_decor_params(decor):
     """
 
     def __new_decor():
-        def __wrapper(decorated):
-            return decor(decorated)
-
-        return __wrapper
+        return decor
 
     return __new_decor
 
@@ -47,9 +44,9 @@ def make_class_decor_params(*filters):
     :return: The new @decorator
     """
 
-    def __wrapper(func_decor):  # The actual wrapper
-        def __decor(*args, **kwargs):  # The new decorator
-            def __class_wrapper(cls):  # The wrapper of the new decorator
+    def __decor(func_decor):
+        def __new_decor(*args, **kwargs):
+            def __class_decor(cls):
                 for name in _clazz.get_all_members(
                         cls,
                         _clazz.filter_item(_types.is_class_method),
@@ -59,11 +56,11 @@ def make_class_decor_params(*filters):
                     setattr(cls, name, new_func)
                 return cls
 
-            return __class_wrapper
+            return __class_decor
 
-        return __decor
+        return __new_decor
 
-    return __wrapper
+    return __decor
 
 
 def make_class_decor_paramless(*filters):
@@ -79,20 +76,20 @@ def make_class_decor_paramless(*filters):
     :return: The new @decorator
     """
 
-    def __wrapper(func_decor):
+    def __decor(func_decor):
         return make_decor_paramless(
             make_class_decor_params(*filters)(
                 make_decor_params(func_decor)
             )
         )
 
-    return __wrapper
+    return __decor
 
 
 def make_multipurpose_decor_params(*filters):
-    def __wrapper(func_decor):  # The actual wrapper
-        def __decor(*args, **kwargs):  # The new decorator
-            def __inner_wrapper(cls_or_func):  # The wrapper of the new decorator
+    def __decor(func_decor):
+        def __new_decor(*args, **kwargs):
+            def __inner_decor(cls_or_func):
                 if _types.is_class(cls_or_func):
                     return make_class_decor_params(*filters)(func_decor)(*args, **kwargs)(cls_or_func)
                 elif _types.is_func_or_method(cls_or_func):
@@ -100,11 +97,11 @@ def make_multipurpose_decor_params(*filters):
                 else:
                     return cls_or_func
 
-            return __inner_wrapper
+            return __inner_decor
 
-        return __decor
+        return __new_decor
 
-    return __wrapper
+    return __decor
 
 
 def make_multipurpose_decor_paramless(*filters):

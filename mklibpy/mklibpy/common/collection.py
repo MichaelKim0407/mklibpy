@@ -61,7 +61,7 @@ class StandardList(list):
         :return: @decorator
         """
 
-        def __wrapper(func):
+        def __decor(func):
             func_args = _code.func.FuncArgs(func)
 
             def __convert(_param_map):
@@ -82,7 +82,7 @@ class StandardList(list):
 
             return new_func
 
-        return __wrapper
+        return __decor
 
     @classmethod
     def convert_attr(cls, *names, **kwargs):
@@ -100,7 +100,7 @@ class StandardList(list):
         :return: @decorator
         """
 
-        def __wrapper(decorated_cls):
+        def __decor(decorated_cls):
             __setattr = decorated_cls.__setattr__
 
             def new_setattr(self, key, value):
@@ -111,7 +111,7 @@ class StandardList(list):
             setattr(decorated_cls, "__setattr__", new_setattr)
             return decorated_cls
 
-        return __wrapper
+        return __decor
 
     # --- list methods ---
 
@@ -180,7 +180,7 @@ LIST_METHOD_IGNORE = {
 
 
 def __post_list_call(cls, func):
-    def __wrapper(method):
+    def __decor(method):
         def __new_method(*args, **kwargs):
             if args and isinstance(args[0], cls):
                 __backup = list(args[0])
@@ -196,16 +196,16 @@ def __post_list_call(cls, func):
 
         return __new_method
 
-    return __wrapper
+    return __decor
 
 
 def __make_list(func):
-    def __wrapper(cls):
+    def __decor(cls):
         return _code.decor.make_class_decor_params(
             _code.clazz.filter_name(lambda name: name not in LIST_METHOD_IGNORE)
         )(__post_list_call)(cls, func)(cls)
 
-    return __wrapper
+    return __decor
 
 
 def __check_unique(l):
