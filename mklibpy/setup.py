@@ -35,17 +35,17 @@ setup(
     description="Python library created by Michael Kim",
 
     classifiers=[
-        "Development Status :: 1 - Planning",
+        "Development Status :: 2 - Pre-Alpha",
 
         "Intended Audience :: Developers",
 
         "License :: OSI Approved :: MIT License",
 
         "Programming Language :: Python :: 2.7",
-        "Programming Language :: Python :: 3.3",
         "Programming Language :: Python :: 3.4",
         "Programming Language :: Python :: 3.5",
         "Programming Language :: Python :: 3.6",
+        "Programming Language :: Python :: 3.7",
 
         "Topic :: Software Development :: Libraries",
     ]
