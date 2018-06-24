@@ -6,7 +6,7 @@ __author__ = 'Michael'
 class FuncArgs(object):
     def __init__(self, func):
         self.count = func.__code__.co_argcount
-        self.args = func.__code__.co_varnames[:self.count]
+        self.args = list(func.__code__.co_varnames[:self.count])
 
         if _types.is_method(func):
             self.count -= 1

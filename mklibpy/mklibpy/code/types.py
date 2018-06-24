@@ -8,8 +8,19 @@ MethodDescriptorType = type(list.append)
 SlotWrapperType = type(list.__add__)
 
 
+class __C1:
+    pass
+
+
+class __C2(object):
+    pass
+
+
+ClassTypes = (type(__C1), type(__C2))
+
+
 def is_class(obj):
-    return isinstance(obj, type)
+    return isinstance(obj, ClassTypes[0]) or isinstance(obj, ClassTypes[1])
 
 
 def is_func(obj):
