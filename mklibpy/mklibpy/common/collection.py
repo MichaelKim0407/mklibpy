@@ -1,6 +1,6 @@
-import mklibpy.code as _code
-import mklibpy.error as _error
-import mklibpy.util as _util
+from .. import code as _code
+from .. import error as _error
+from .. import util as _util
 
 __author__ = 'Michael'
 

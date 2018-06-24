@@ -1,6 +1,7 @@
 import django.http as _http
-import mklibpy.code as _code
 from django.shortcuts import render as _render
+
+from .. import code as _code
 
 __author__ = 'Michael'
 

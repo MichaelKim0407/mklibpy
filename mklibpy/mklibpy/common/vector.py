@@ -1,8 +1,8 @@
 import math as _math
 
-import mklibpy.error as _error
-import mklibpy.util as _util
 from . import collection as _collection
+from .. import error as _error
+from .. import util as _util
 
 __author__ = 'Michael'
 

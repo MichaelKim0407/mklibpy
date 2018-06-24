@@ -1,4 +1,4 @@
-import mklibpy.error as _error
+from .. import error as _error
 
 __author__ = 'Michael'
 
