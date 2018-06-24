@@ -62,10 +62,7 @@ class StandardList(list):
         """
 
         def __wrapper(func):
-            required_args = _code.func.get_args(func)
-            default_values = _code.func.get_default_values(
-                required_args, func.__defaults__
-            )
+            func_args = _code.func.FuncArgs(func)
 
             def __convert(_param_map):
                 for name in _param_map:
@@ -73,22 +70,13 @@ class StandardList(list):
                         _param_map[name] = cls.from_item(_param_map[name], **kwargs)
 
             if _code.types.is_method(func):
-                # required_args.remove("self")
-                required_args.pop(0)
-
                 def new_func(self, *args, **kwargs):
-                    param_map = _code.func.get_param_map(
-                        required_args, default_values,
-                        args, kwargs
-                    )
+                    param_map = func_args.push(*args, **kwargs)
                     __convert(param_map)
                     return func(self, **param_map)
             else:
                 def new_func(*args, **kwargs):
-                    param_map = _code.func.get_param_map(
-                        required_args, default_values,
-                        args, kwargs
-                    )
+                    param_map = func_args.push(*args, **kwargs)
                     __convert(param_map)
                     return func(**param_map)
 
