@@ -8,8 +8,12 @@ with open(os.path.join(root_dir, "VERSION")) as f:
     VERSION = f.read().rstrip()
 
 extra_django = ['django>=1.10,<2']
+extra_django_more = ['django-markdownx']
+extra_django_all = extra_django + extra_django_more
+
 extra_tornado = ['tornado==4.*']
-extra_all = extra_django + extra_tornado
+
+extra_all = extra_django_all + extra_tornado
 
 setup(
     name="mklibpy",
@@ -20,6 +24,7 @@ setup(
         'all': extra_all,
         'tornado': extra_tornado,
         'django': extra_django,
+        'django-all': extra_django_all,
     },
 
     packages=find_packages(),

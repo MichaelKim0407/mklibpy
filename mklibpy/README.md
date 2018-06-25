@@ -16,11 +16,12 @@ pip install mklibpy[xxx]
 
 List of extra dependencies:
 
-| Name      | Description |
-| ---       | --- |
-| django    | Django library and apps under `mklibpy.django` |
-| tornado   | Tornado library under `mklibpy.tornado` |
-| all       | All of above |
+| Name       | Description |
+| ---        | --- |
+| django     | Django library and apps under `mklibpy.django` |
+| django-all | Extra django libraries |
+| tornado    | Tornado library under `mklibpy.tornado` |
+| all        | All of above |
 
 ## Usage
 
