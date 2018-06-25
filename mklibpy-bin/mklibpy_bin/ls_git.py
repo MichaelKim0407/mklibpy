@@ -63,6 +63,16 @@ def get_git_branch(abspath):
             return line.lstrip("*").strip()
 
 
+def is_venv(abspath):
+    path = os.path.join(abspath, "bin", "activate")
+    return os.path.exists(path) and os.path.isfile(path)
+
+
+def get_venv_py_version(abspath):
+    with CD(abspath):
+        return system_call(['bin/python', '--version'])[0]
+
+
 class LsGit(object):
     def __init__(self, stdout=None):
         self.stdout = stdout
@@ -159,11 +169,15 @@ class LsGitProcess(object):
             dir = remove_switch(dir)
 
         abspath = os.path.abspath(os.path.join(self.__cur_dir, dir))
-        if not is_git_repo(abspath):
-            return line
 
-        branch = get_git_branch(abspath)
-        return line + self.color(" ({})".format(branch), color='red', mode='bold')
+        if is_git_repo(abspath):
+            branch = get_git_branch(abspath)
+            return line + self.color(" ({})".format(branch), color='red', mode='bold')
+        elif is_venv(abspath):
+            py_ver = get_venv_py_version(abspath)
+            return line + " " + self.color("[{}]".format(py_ver), color='red', mode='fill')
+        else:
+            return line
 
     def __native_call(self):
         return subprocess.check_call(self.__cmd, stdout=self.__parent.stdout)
