@@ -1,7 +1,7 @@
-import os
 import sys
 import time
 
+import os
 from mklibpy.util.path import ensure_dir
 
 __author__ = 'Michael'
@@ -36,8 +36,12 @@ def get_config_path():
     ensure_dir(path)
     if not os.path.exists(path):
         with open(path, 'w') as f:
-            f.write('''from mklibpy.common.collection import SequenceDict
+            f.write('''
+from collections import defaultdict
+from mklibpy.common.collection import SequenceDict
+
 managers = SequenceDict()
+skip = defaultdict(lambda: [])
 ''')
     return path
 
@@ -55,7 +59,7 @@ def load_config(path=None):
     vars = {}
     with open(path) as f:
         exec(f.read(), vars)
-    return vars['managers']
+    return vars['managers'], vars.get('skip')
 
 
 def add(name, config_path=None):
@@ -76,7 +80,7 @@ managers['{name}'] = {cls}{args}
 
 
 def main():
-    managers = load_config()
+    managers, skip = load_config()
 
     import argparse
 
@@ -108,7 +112,15 @@ Builtin managers (can add): {}'''.format(managers.keys(), sorted(builtins)))
         return
 
     if not args.managers:
-        args.managers = managers.keys()
+        if skip and args.command in skip:
+            skipped_managers = skip[args.command]
+        else:
+            skipped_managers = ()
+        args.managers = (
+            key
+            for key in managers.keys()
+            if key not in skipped_managers
+        )
     for name in args.managers:
         if name not in managers:
             print("'{}' is not a configured manager".format(name), file=sys.stderr)
