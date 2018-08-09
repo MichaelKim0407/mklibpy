@@ -50,17 +50,51 @@ if PTY:
         return __gen()
 
 
-def is_git_repo(abspath):
-    path = os.path.join(abspath, ".git")
-    return os.path.exists(path) and os.path.isdir(path)
+class Path(object):
+    def __init__(self, path, *paths):
+        path = os.path.join(path, *paths)
+        self.path = os.path.abspath(path)
 
+    @cached_property
+    def is_git_repo(self):
+        path = os.path.join(self.path, ".git")
+        return os.path.isdir(path)
 
-def get_git_branch(abspath):
-    with CD(abspath):
-        for line in system_call(['git', 'branch']):
-            if not line.startswith("*"):
-                continue
-            return line.lstrip("*").strip()
+    @cached_property
+    def git_branch(self):
+        with CD(self.path):
+            for line in system_call(['git', 'branch']):
+                if not line.startswith("*"):
+                    continue
+                return line.lstrip("*").strip()
+
+    @cached_property
+    def is_venv(self):
+        path1 = os.path.join(self.path, "bin", "activate")
+        path2 = os.path.join(self.path, "bin", "python")
+        return os.path.isfile(path1) and os.path.isfile(path2)
+
+    @cached_property
+    def venv_py_version(self):
+        with CD(self.path):
+            return system_call(['bin/python', '--version'])[0]
+
+    def append(self, check_git=True, check_venv=True):
+        # TODO check_git and check_venv with command arguments
+        if check_git and self.is_git_repo:
+            return {
+                'text': "({})".format(self.git_branch),
+                'color': 'red',
+                'mode': 'bold',
+            }
+        elif check_venv and self.is_venv:
+            return {
+                'text': self.venv_py_version,
+                'color': 'red',
+                'mode': 'fill',
+            }
+        else:
+            return None
 
 
 class LsGit(object):
@@ -158,12 +192,11 @@ class LsGitProcess(object):
         if self.__color:
             dir = remove_switch(dir)
 
-        abspath = os.path.abspath(os.path.join(self.__cur_dir, dir))
-        if not is_git_repo(abspath):
+        path = Path(self.__cur_dir, dir)
+        append = path.append()
+        if append is None:
             return line
-
-        branch = get_git_branch(abspath)
-        return line + self.color(" ({})".format(branch), color='red', mode='bold')
+        return line + " " + self.color(**append)
 
     def __native_call(self):
         return subprocess.check_call(self.__cmd, stdout=self.__parent.stdout)
