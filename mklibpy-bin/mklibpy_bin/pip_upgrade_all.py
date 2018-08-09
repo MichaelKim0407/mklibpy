@@ -5,8 +5,6 @@ from cached_property import cached_property, timed_cached_property
 
 __author__ = 'Michael'
 
-PIP_LIST_FORMAT_VERSION = 9
-
 
 class PipUpgradeError(Exception):
     pass
@@ -35,7 +33,7 @@ class Pip(object):
         self.path = path
 
     @cached_property
-    def legacy(self):
+    def version_major(self):
         try:
             out = subprocess.check_output(
                 [self.path, "--version"],
@@ -45,15 +43,24 @@ class Pip(object):
             raise InvalidPipError(self.path)
         version = out.split()[1]
         major = int(version.split(".")[0])
-        return major < PIP_LIST_FORMAT_VERSION
+        return major
 
     @timed_cached_property(ttl=60)
     def outdated(self):
         def __yield():
             try:
                 cmd = [self.path, "list", "--outdated"]
-                if not self.legacy:
+
+                if self.version_major > 10:
+                    # the legacy format has been deprecated as of pip 18
+                    cmd += ['--format=freeze']
+                    fmt = 'freeze'
+                elif self.version_major >= 9:
                     cmd += ['--format=legacy']
+                    fmt = 'legacy'
+                else:
+                    fmt = 'legacy'
+
                 out = subprocess.check_output(
                     cmd,
                     stderr=subprocess.DEVNULL
@@ -64,7 +71,14 @@ class Pip(object):
                 line = line.strip()
                 if not line:
                     continue
-                name = line.split()[0]
+
+                if fmt == 'freeze':
+                    name = line.split('==')[0]
+                elif fmt == 'legacy':
+                    name = line.split()[0]
+                else:
+                    raise ValueError(fmt)
+
                 yield name
 
         return list(__yield())
