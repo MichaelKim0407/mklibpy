@@ -25,6 +25,11 @@ def system_call(*args, **kwargs):
     return out.decode().splitlines(False)
 
 
+def stderr_call(*args, **kwargs):
+    out = subprocess.check_output(*args, **kwargs, stderr=subprocess.STDOUT)
+    return out.decode().splitlines(False)
+
+
 if PTY:
     def system_call_pty(*args, **kwargs):
         """
@@ -77,7 +82,10 @@ class Path(object):
     @cached_property
     def venv_py_version(self):
         with CD(self.path):
-            return system_call(['bin/python', '--version'])[0]
+            try:
+                return system_call(['bin/python', '--version'])[0]
+            except IndexError:
+                return stderr_call(['bin/python', '--version'])[0]
 
     def append(self, check_git=True, check_venv=True):
         # TODO check_git and check_venv with command arguments
