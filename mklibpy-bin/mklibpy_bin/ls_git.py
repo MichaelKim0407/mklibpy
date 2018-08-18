@@ -200,6 +200,8 @@ class LsGitProcess(object):
         if self.__color:
             dir = remove_switch(dir)
 
+        dir = dir.rstrip('/@')
+
         path = Path(self.__cur_dir, dir)
         append = path.append()
         if append is None:
