@@ -130,24 +130,27 @@ Builtin managers (can add): {}'''.format(managers.keys(), sorted(builtins))
             continue
 
         manager = managers[name]
-        if args.command == 'check':
-            sys.stdout.write("'{}' has ...".format(name))
-            sys.stdout.flush()
-            n = manager.check()
-            sys.stdout.write("\10\10\10{} upgrade(s).\n".format(n))
-            with open(get_result_path(name), 'w') as f:
-                f.write("'{}' has {} upgrade(s). ({})\n".format(
-                    name, n, time.strftime(TIME_FORMAT)
-                ))
-        elif args.command == 'show':
-            with open(get_result_path(name)) as f:
-                print(f.read().strip())
-        elif args.command == 'list':
-            print("Listing upgrades for '{}'...".format(name))
-            manager.list()
-        elif args.command == 'run':
-            print("Upgrading '{}'...".format(name))
-            manager.run()
+        try:
+            if args.command == 'check':
+                sys.stdout.write("'{}' has ...".format(name))
+                sys.stdout.flush()
+                n = manager.check()
+                sys.stdout.write("\10\10\10{} upgrade(s).\n".format(n))
+                with open(get_result_path(name), 'w') as f:
+                    f.write("'{}' has {} upgrade(s). ({})\n".format(
+                        name, n, time.strftime(TIME_FORMAT)
+                    ))
+            elif args.command == 'show':
+                with open(get_result_path(name)) as f:
+                    print(f.read().strip())
+            elif args.command == 'list':
+                print("Listing upgrades for '{}'...".format(name))
+                manager.list()
+            elif args.command == 'run':
+                print("Upgrading '{}'...".format(name))
+                manager.run()
+        except Exception as e:
+            print(e, file=sys.stderr)
 
 
 if __name__ == '__main__':
