@@ -94,12 +94,14 @@ show = show number of upgrades as of last check;
 list = list upgrades;
 run = upgrade;
 add = add builtin manager(s)
-''')
+'''
+    )
     arg_parser.add_argument(
         'managers', nargs='*',
         help='''Specify upgrade managers, or leave empty for all.
 Configured managers: {};
-Builtin managers (can add): {}'''.format(managers.keys(), sorted(builtins)))
+Builtin managers (can add): {}'''.format(managers.keys(), sorted(builtins))
+    )
 
     args = arg_parser.parse_args()
 
@@ -121,10 +123,12 @@ Builtin managers (can add): {}'''.format(managers.keys(), sorted(builtins)))
             for key in managers.keys()
             if key not in skipped_managers
         )
+
     for name in args.managers:
         if name not in managers:
             print("'{}' is not a configured manager".format(name), file=sys.stderr)
             continue
+
         manager = managers[name]
         if args.command == 'check':
             sys.stdout.write("'{}' has ...".format(name))
