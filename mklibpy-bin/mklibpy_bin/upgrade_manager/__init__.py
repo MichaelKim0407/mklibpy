@@ -94,12 +94,14 @@ show = show number of upgrades as of last check;
 list = list upgrades;
 run = upgrade;
 add = add builtin manager(s)
-''')
+'''
+    )
     arg_parser.add_argument(
         'managers', nargs='*',
         help='''Specify upgrade managers, or leave empty for all.
 Configured managers: {};
-Builtin managers (can add): {}'''.format(managers.keys(), sorted(builtins)))
+Builtin managers (can add): {}'''.format(managers.keys(), sorted(builtins))
+    )
 
     args = arg_parser.parse_args()
 
@@ -121,29 +123,34 @@ Builtin managers (can add): {}'''.format(managers.keys(), sorted(builtins)))
             for key in managers.keys()
             if key not in skipped_managers
         )
+
     for name in args.managers:
         if name not in managers:
             print("'{}' is not a configured manager".format(name), file=sys.stderr)
             continue
+
         manager = managers[name]
-        if args.command == 'check':
-            sys.stdout.write("'{}' has ...".format(name))
-            sys.stdout.flush()
-            n = manager.check()
-            sys.stdout.write("\10\10\10{} upgrade(s).\n".format(n))
-            with open(get_result_path(name), 'w') as f:
-                f.write("'{}' has {} upgrade(s). ({})\n".format(
-                    name, n, time.strftime(TIME_FORMAT)
-                ))
-        elif args.command == 'show':
-            with open(get_result_path(name)) as f:
-                print(f.read().strip())
-        elif args.command == 'list':
-            print("Listing upgrades for '{}'...".format(name))
-            manager.list()
-        elif args.command == 'run':
-            print("Upgrading '{}'...".format(name))
-            manager.run()
+        try:
+            if args.command == 'check':
+                sys.stdout.write("'{}' has ...".format(name))
+                sys.stdout.flush()
+                n = manager.check()
+                sys.stdout.write("\10\10\10{} upgrade(s).\n".format(n))
+                with open(get_result_path(name), 'w') as f:
+                    f.write("'{}' has {} upgrade(s). ({})\n".format(
+                        name, n, time.strftime(TIME_FORMAT)
+                    ))
+            elif args.command == 'show':
+                with open(get_result_path(name)) as f:
+                    print(f.read().strip())
+            elif args.command == 'list':
+                print("Listing upgrades for '{}'...".format(name))
+                manager.list()
+            elif args.command == 'run':
+                print("Upgrading '{}'...".format(name))
+                manager.run()
+        except Exception as e:
+            print(e, file=sys.stderr)
 
 
 if __name__ == '__main__':
