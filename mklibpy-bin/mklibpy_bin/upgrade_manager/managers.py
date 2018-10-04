@@ -1,6 +1,5 @@
 import re
 import subprocess
-
 from cached_property import timed_cached_property
 
 from . import Manager

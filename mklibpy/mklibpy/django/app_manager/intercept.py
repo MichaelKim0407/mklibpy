@@ -1,6 +1,6 @@
+import logging
 from django.http import Http404
 
-import logging
 from . import settings, models
 
 __author__ = 'Michael'

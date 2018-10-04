@@ -1,6 +1,6 @@
-import subprocess
 import sys
 
+import subprocess
 from cached_property import cached_property, timed_cached_property
 
 __author__ = 'Michael'
