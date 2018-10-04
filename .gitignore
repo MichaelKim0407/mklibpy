@@ -9,5 +9,9 @@ __pycache__/
 dist/
 *.egg-info/
 
+# PyTest
+.eggs/
+.pytest_cache/
+
 # Mac
 .DS_Store

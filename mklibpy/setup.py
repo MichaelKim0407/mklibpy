@@ -27,6 +27,13 @@ setup(
         'django-all': extra_django_all,
     },
 
+    setup_requires=[
+        "pytest-runner",
+    ],
+    tests_require=[
+        "pytest",
+    ],
+
     packages=find_packages(),
 
     url="https://github.com/MichaelKim0407/mklibpy",

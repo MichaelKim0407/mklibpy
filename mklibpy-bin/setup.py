@@ -29,6 +29,13 @@ setup(
         ],
     },
 
+    setup_requires=[
+        "pytest-runner",
+    ],
+    tests_require=[
+        "pytest",
+    ],
+
     url="https://github.com/MichaelKim0407/mklibpy",
 
     license="MIT",
