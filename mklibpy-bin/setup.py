@@ -12,6 +12,8 @@ setup(
 
     version=VERSION,
 
+    python_requires=">=3.4",
+
     packages=find_packages(),
 
     install_requires=[
