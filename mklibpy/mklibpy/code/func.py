@@ -8,7 +8,7 @@ class FuncArgs(object):
         self.count = func.__code__.co_argcount
         self.args = list(func.__code__.co_varnames[:self.count])
 
-        if _types.is_method(func):
+        if _types.is_bound_method(func):
             self.count -= 1
             self.args.pop(0)
 

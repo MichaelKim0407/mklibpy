@@ -44,8 +44,7 @@ class StandardList(list):
     # --- Code simplification ---
 
     @classmethod
-    @_code.decor.make_multipurpose_decor_params(
-        _code.clazz.filter_item(_code.types.is_func_or_method))
+    @_code.decor.make_multipurpose_decor_params()
     def convert_params(cls, *names, **kwargs):
         """
         Decorate a function or a class,

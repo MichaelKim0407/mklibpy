@@ -92,7 +92,7 @@ def make_multipurpose_decor_params(*filters):
             def __inner_decor(cls_or_func):
                 if _types.is_class(cls_or_func):
                     return make_class_decor_params(*filters)(func_decor)(*args, **kwargs)(cls_or_func)
-                elif _types.is_func_or_method(cls_or_func):
+                elif (_types.is_function | _types.is_class_method)(cls_or_func):
                     return func_decor(*args, **kwargs)(cls_or_func)
                 else:
                     return cls_or_func
