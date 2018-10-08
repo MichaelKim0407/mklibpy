@@ -201,7 +201,7 @@ def __post_list_call(cls, func):
 def __make_list(func):
     def __decor(cls):
         return _code.decor.make_class_decor_params(
-            _code.clazz.filter_name(lambda name: name not in LIST_METHOD_IGNORE)
+            name_exclude=LIST_METHOD_IGNORE,
         )(__post_list_call)(cls, func)(cls)
 
     return __decor

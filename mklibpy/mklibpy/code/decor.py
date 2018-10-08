@@ -1,4 +1,4 @@
-from . import clazz as _clazz
+from . import attrs as _attrs
 from . import types as _types
 
 __author__ = 'Michael'
@@ -33,7 +33,7 @@ def make_decor_params(decor):
     return __new_decor
 
 
-def make_class_decor_params(*filters):
+def make_class_decor_params(**filters):
     """
     Decorate a @decorator targeting a function,
     making it a @decorator that targets a class.
@@ -47,10 +47,10 @@ def make_class_decor_params(*filters):
     def __decor(func_decor):
         def __new_decor(*args, **kwargs):
             def __class_decor(cls):
-                for name in _clazz.get_all_members(
+                for name in _attrs.AttributesOf(
                         cls,
-                        _clazz.filter_item(_types.is_class_method),
-                        *filters):
+                        attr_lambda=_types.is_class_method
+                ).filter(**filters).attrs:
                     func = getattr(cls, name)
                     new_func = func_decor(*args, **kwargs)(func)
                     setattr(cls, name, new_func)
@@ -63,7 +63,7 @@ def make_class_decor_params(*filters):
     return __decor
 
 
-def make_class_decor_paramless(*filters):
+def make_class_decor_paramless(**filters):
     """
     Decorate a parameter-less @decorator targeting a function,
     making it a @decorator that targets a class.
@@ -78,7 +78,7 @@ def make_class_decor_paramless(*filters):
 
     def __decor(func_decor):
         return make_decor_paramless(
-            make_class_decor_params(*filters)(
+            make_class_decor_params(**filters)(
                 make_decor_params(func_decor)
             )
         )
@@ -86,12 +86,12 @@ def make_class_decor_paramless(*filters):
     return __decor
 
 
-def make_multipurpose_decor_params(*filters):
+def make_multipurpose_decor_params(**filters):
     def __decor(func_decor):
         def __new_decor(*args, **kwargs):
             def __inner_decor(cls_or_func):
                 if _types.is_class(cls_or_func):
-                    return make_class_decor_params(*filters)(func_decor)(*args, **kwargs)(cls_or_func)
+                    return make_class_decor_params(**filters)(func_decor)(*args, **kwargs)(cls_or_func)
                 elif (_types.is_function | _types.is_class_method)(cls_or_func):
                     return func_decor(*args, **kwargs)(cls_or_func)
                 else:
@@ -104,10 +104,10 @@ def make_multipurpose_decor_params(*filters):
     return __decor
 
 
-def make_multipurpose_decor_paramless(*filters):
+def make_multipurpose_decor_paramless(**filters):
     def __decor(func_decor):
         return make_decor_paramless(
-            make_multipurpose_decor_params(*filters)(
+            make_multipurpose_decor_params(**filters)(
                 make_decor_params(func_decor)
             )
         )
