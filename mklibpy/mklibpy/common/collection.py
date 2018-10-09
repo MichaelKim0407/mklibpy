@@ -44,7 +44,7 @@ class StandardList(list):
     # --- Code simplification ---
 
     @classmethod
-    @_code.decor.make_multipurpose_decor_params()
+    @_code.decor.with_params(_code.decor.multipurpose_decorator())
     def convert_params(cls, *names, **kwargs):
         """
         Decorate a function or a class,
@@ -200,9 +200,9 @@ def __post_list_call(cls, func):
 
 def __make_list(func):
     def __decor(cls):
-        return _code.decor.make_class_decor_params(
+        return _code.decor.with_params(_code.decor.class_decorator(
             name_exclude=LIST_METHOD_IGNORE,
-        )(__post_list_call)(cls, func)(cls)
+        ))(__post_list_call)(cls, func)(cls)
 
     return __decor
 

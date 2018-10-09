@@ -4,36 +4,20 @@ from . import types as _types
 __author__ = 'Michael'
 
 
-def make_decor_paramless(decor):
+def as_is(x):
     """
-    Decorates a @decorator, making it parameter-less.
-    The @decorator must be callable without parameters.
+    Circumvent the decorator syntax limit by wrapping the result in a function call.
 
-    :param decor: The @decorator
-    :return: The new @decorator
+    E.g.
+        @decorator_list[0]
+    will result in SyntaxError, however
+        @as_is(decorator_list[0])
+    is accepted.
     """
-
-    def __new_decor(decorated):
-        return decor()(decorated)
-
-    return __new_decor
+    return x
 
 
-def make_decor_params(decor):
-    """
-    Decorates a parameter-less @decorator, making it a decorator with 0 parameters.
-
-    :param decor: The @decorator
-    :return: The new @decorator
-    """
-
-    def __new_decor():
-        return decor
-
-    return __new_decor
-
-
-def make_class_decor_params(**filters):
+def class_decorator(**filters):
     """
     Decorate a @decorator targeting a function,
     making it a @decorator that targets a class.
@@ -44,72 +28,52 @@ def make_class_decor_params(**filters):
     :return: The new @decorator
     """
 
+    # TODO: staticmethod and classmethod
+
     def __decor(func_decor):
-        def __new_decor(*args, **kwargs):
-            def __class_decor(cls):
-                for name in _attrs.AttributesOf(
-                        cls,
-                        attr_lambda=_types.is_class_method
-                ).filter(**filters).attrs:
-                    func = getattr(cls, name)
-                    new_func = func_decor(*args, **kwargs)(func)
-                    setattr(cls, name, new_func)
-                return cls
+        def __class_decor(cls):
+            for name, func in _attrs.AttributesOf(
+                    cls,
+                    attr_lambda=_types.is_class_method,
+            ).filter(**filters).attrs.items():
+                new_func = func_decor(func)
+                setattr(cls, name, new_func)
+            return cls
 
-            return __class_decor
-
-        return __new_decor
+        return __class_decor
 
     return __decor
 
 
-def make_class_decor_paramless(**filters):
+def multipurpose_decorator(**filters):
+    def __decor(func_decor):
+        def __inner_decor(cls_or_func):
+            if _types.is_class(cls_or_func):
+                return class_decorator(**filters)(func_decor)(cls_or_func)
+            elif (_types.is_function | _types.is_class_method)(cls_or_func):
+                return func_decor(cls_or_func)
+            else:
+                return cls_or_func
+
+        return __inner_decor
+
+    return __decor
+
+
+def with_params(decor_decor):
     """
-    Decorate a parameter-less @decorator targeting a function,
-    making it a @decorator that targets a class.
-
-    All matching methods will be decorated by the
-    original @decorator.
-
-    See also: make_class_decor_params
-
-    :return: The new @decorator
+    Decorate a @decorator targeting a decorator,
+    making it accept and return param-decorators.
     """
 
-    def __decor(func_decor):
-        return make_decor_paramless(
-            make_class_decor_params(**filters)(
-                make_decor_params(func_decor)
-            )
-        )
+    def __new_decor_decor(decor_with_params):
+        def __new_decor_with_params(*args, **kwargs):
+            return decor_decor(decor_with_params(*args, **kwargs))
 
-    return __decor
+        return __new_decor_with_params
 
-
-def make_multipurpose_decor_params(**filters):
-    def __decor(func_decor):
-        def __new_decor(*args, **kwargs):
-            def __inner_decor(cls_or_func):
-                if _types.is_class(cls_or_func):
-                    return make_class_decor_params(**filters)(func_decor)(*args, **kwargs)(cls_or_func)
-                elif (_types.is_function | _types.is_class_method)(cls_or_func):
-                    return func_decor(*args, **kwargs)(cls_or_func)
-                else:
-                    return cls_or_func
-
-            return __inner_decor
-
-        return __new_decor
-
-    return __decor
+    return __new_decor_decor
 
 
-def make_multipurpose_decor_paramless(**filters):
-    def __decor(func_decor):
-        return make_decor_paramless(
-            make_multipurpose_decor_params(**filters)(
-                make_decor_params(func_decor)
-            )
-        )
-
-    return __decor
+def filter_not_special(name):
+    return not name.startswith('__')
