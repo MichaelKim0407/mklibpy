@@ -10,12 +10,12 @@ cd ..
 
 package_version=$(cat "mklibpy/__init__.py" | ggrep -oP "(?<=__version__ = \')([0-9\.]*)")
 
-if [ "${version}" != "${package_version}" ]; then
-    echo "VERSION and __version__ does not match"
+if [[ "${version}" != "${package_version}" ]]; then
+    echo "VERSION and __version__ do not match"
     exit 1
 fi;
 
-if [ -f ${dist} ]; then
+if [[ -f ${dist} ]]; then
     echo "Package already exists. Did you forget to increase version number?"
     exit 1
 fi;
