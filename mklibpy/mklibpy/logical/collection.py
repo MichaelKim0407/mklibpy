@@ -10,6 +10,9 @@ class In(_Abs):
     def __call__(self, val):
         return val in self.__col
 
+    def __str__(self):
+        return f"in {self.__col!r}"
+
 
 class Contains(_Abs):
     def __init__(self, val):
@@ -17,6 +20,9 @@ class Contains(_Abs):
 
     def __call__(self, collection):
         return self.__val in collection
+
+    def __str__(self):
+        return f"contains {self.__val!r}"
 
 
 NotIn = _Abs.NOT_CLASS(In)

@@ -5,11 +5,18 @@ class AbstractBooleanFunc(object):
     def __call__(self, *args, **kwargs):
         raise NotImplementedError
 
+    def __str__(self):
+        return ''
+
+    def __repr__(self):
+        return f"<Boolean> {self}"
+
     @staticmethod
     def NOT(func):
         return BooleanFunc(
             lambda *args, **kwargs:
-            not func(*args, **kwargs)
+            not func(*args, **kwargs),
+            str=f"not ({func})",
         )
 
     def __neg__(self):
@@ -23,7 +30,8 @@ class AbstractBooleanFunc(object):
     def AND(f1, f2):
         return BooleanFunc(
             lambda *args, **kwargs:
-            f1(*args, **kwargs) and f2(*args, **kwargs)
+            f1(*args, **kwargs) and f2(*args, **kwargs),
+            str=f"({f1}) and ({f2})",
         )
 
     def __and__(self, other):
@@ -37,7 +45,8 @@ class AbstractBooleanFunc(object):
     def OR(f1, f2):
         return BooleanFunc(
             lambda *args, **kwargs:
-            f1(*args, **kwargs) or f2(*args, **kwargs)
+            f1(*args, **kwargs) or f2(*args, **kwargs),
+            str=f"({f1}) or ({f2})",
         )
 
     def __or__(self, other):
@@ -59,8 +68,15 @@ class AbstractBooleanFunc(object):
 
 
 class BooleanFunc(AbstractBooleanFunc):
-    def __init__(self, func):
+    def __init__(self, func, str=None):
         self.__func = func
+        self.__str = str
 
     def __call__(self, *args, **kwargs):
         return self.__func(*args, **kwargs)
+
+    def __str__(self):
+        if self.__str is not None:
+            return self.__str
+        else:
+            return repr(self.__func)

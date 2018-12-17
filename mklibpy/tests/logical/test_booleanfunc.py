@@ -20,15 +20,30 @@ def test_logical():
     assert not (f & f2)()
 
 
+class A(AbstractBooleanFunc):
+    def __call__(self, *args, **kwargs):
+        return True
+
+    def __str__(self):
+        return 'True'
+
+
+B = AbstractBooleanFunc.NOT_CLASS(A)
+C = AbstractBooleanFunc.OR_CLASSES(A, B)
+D = AbstractBooleanFunc.AND_CLASSES(A, B)
+
+
 def test_logical_class():
-    class A(AbstractBooleanFunc):
-        def __call__(self, *args, **kwargs):
-            return True
-
     assert A()()
-
-    B = AbstractBooleanFunc.NOT_CLASS(A)
     assert not B()()
+    assert C()()
+    assert not D()()
 
-    assert AbstractBooleanFunc.OR_CLASSES(A, B)()()
-    assert not AbstractBooleanFunc.AND_CLASSES(A, B)()()
+
+def test_str():
+    assert str(A()) == 'True'
+    assert repr(A()) == '<Boolean> True'
+
+    assert str(B()) == f"not ({A()})"
+    assert str(C()) == f"({A()}) or ({B()})"
+    assert str(D()) == f"({A()}) and ({B()})"
