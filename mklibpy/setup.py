@@ -4,7 +4,7 @@ from setuptools import setup, find_packages
 
 root_dir = os.path.abspath(os.path.dirname(__file__))
 
-with open(os.path.join(root_dir, "VERSION")) as f:
+with open(os.path.join(root_dir, 'VERSION')) as f:
     VERSION = f.read().rstrip()
 
 extra_django = ['django>=1.10,<2']
@@ -16,11 +16,11 @@ extra_tornado = ['tornado==4.*']
 extra_all = extra_django_all + extra_tornado
 
 setup(
-    name="mklibpy",
+    name='mklibpy',
 
     version=VERSION,
 
-    python_requires=">=2.7,!=3.0.*,!=3.1.*,!=3.2.*,!=3.3.*",
+    python_requires='>=2.7,!=3.0.*,!=3.1.*,!=3.2.*,!=3.3.*',
 
     install_requires=[
         'cached-property',
@@ -34,37 +34,37 @@ setup(
     },
 
     setup_requires=[
-        "pytest-runner",
+        'pytest-runner',
     ],
     tests_require=[
-        "pytest",
+        'pytest',
     ],
 
     packages=find_packages(),
 
-    url="https://github.com/MichaelKim0407/mklibpy",
+    url='https://github.com/MichaelKim0407/mklibpy',
 
-    license="MIT",
+    license='MIT',
 
-    author="Michael Kim",
+    author='Michael Kim',
 
-    author_email="mkim0407@gmail.com",
+    author_email='mkim0407@gmail.com',
 
-    description="Python library created by Michael Kim",
+    description='Python library created by Michael Kim',
 
     classifiers=[
-        "Development Status :: 2 - Pre-Alpha",
+        'Development Status :: 2 - Pre-Alpha',
 
-        "Intended Audience :: Developers",
+        'Intended Audience :: Developers',
 
-        "License :: OSI Approved :: MIT License",
+        'License :: OSI Approved :: MIT License',
 
-        "Programming Language :: Python :: 2.7",
-        "Programming Language :: Python :: 3.4",
-        "Programming Language :: Python :: 3.5",
-        "Programming Language :: Python :: 3.6",
-        "Programming Language :: Python :: 3.7",
+        'Programming Language :: Python :: 2.7',
+        'Programming Language :: Python :: 3.4',
+        'Programming Language :: Python :: 3.5',
+        'Programming Language :: Python :: 3.6',
+        'Programming Language :: Python :: 3.7',
 
-        "Topic :: Software Development :: Libraries",
+        'Topic :: Software Development :: Libraries',
     ]
 )

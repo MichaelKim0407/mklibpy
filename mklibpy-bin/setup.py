@@ -4,15 +4,15 @@ from setuptools import setup, find_packages
 
 root_dir = os.path.abspath(os.path.dirname(__file__))
 
-with open(os.path.join(root_dir, "VERSION")) as f:
+with open(os.path.join(root_dir, 'VERSION')) as f:
     VERSION, BASE_VERSION = [line.rstrip() for line in f]
 
 setup(
-    name="mklibpy-bin",
+    name='mklibpy-bin',
 
     version=VERSION,
 
-    python_requires=">=3.4",
+    python_requires='>=3.4',
 
     packages=find_packages(),
 
@@ -32,34 +32,34 @@ setup(
     },
 
     setup_requires=[
-        "pytest-runner",
+        'pytest-runner',
     ],
     tests_require=[
-        "pytest",
+        'pytest',
     ],
 
-    url="https://github.com/MichaelKim0407/mklibpy",
+    url='https://github.com/MichaelKim0407/mklibpy',
 
-    license="MIT",
+    license='MIT',
 
-    author="Michael Kim",
+    author='Michael Kim',
 
-    author_email="mkim0407@gmail.com",
+    author_email='mkim0407@gmail.com',
 
-    description="Command line executables for mklibpy",
+    description='Command line executables for mklibpy',
 
     classifiers=[
-        "Development Status :: 1 - Planning",
+        'Development Status :: 1 - Planning',
 
-        "Intended Audience :: Developers",
+        'Intended Audience :: Developers',
 
-        "License :: OSI Approved :: MIT License",
+        'License :: OSI Approved :: MIT License',
 
-        "Programming Language :: Python :: 3.4",
-        "Programming Language :: Python :: 3.5",
-        "Programming Language :: Python :: 3.6",
+        'Programming Language :: Python :: 3.4',
+        'Programming Language :: Python :: 3.5',
+        'Programming Language :: Python :: 3.6',
 
-        "Topic :: Terminals",
-        "Topic :: Utilities",
+        'Topic :: Terminals',
+        'Topic :: Utilities',
     ]
 )

@@ -8,7 +8,7 @@ source "packaging.rc"
 
 cd ..
 
-package_version=$(cat "mklibpy/__init__.py" | ggrep -oP "(?<=__version__ = \")([0-9\.]*)")
+package_version=$(cat "mklibpy/__init__.py" | ggrep -oP "(?<=__version__ = \')([0-9\.]*)")
 
 if [ "${version}" != "${package_version}" ]; then
     echo "VERSION and __version__ does not match"
