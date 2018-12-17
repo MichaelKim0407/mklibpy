@@ -1,4 +1,4 @@
-from mklibpy.logical import AbstractBooleanFunc, BooleanFunc
+from mklibpy.logical import AbstractBooleanFunc, BooleanFunc, TRUE, FALSE
 
 __author__ = 'Michael'
 
@@ -47,3 +47,12 @@ def test_str():
     assert str(B()) == f"not ({A()})"
     assert str(C()) == f"({A()}) or ({B()})"
     assert str(D()) == f"({A()}) and ({B()})"
+
+
+def test_true_false():
+    assert TRUE()
+    assert TRUE(1, x=2)
+    assert str(TRUE) == 'True'
+
+    assert not FALSE()
+    assert str(FALSE) == 'False'

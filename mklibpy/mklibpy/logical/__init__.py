@@ -80,3 +80,7 @@ class BooleanFunc(AbstractBooleanFunc):
             return self.__str
         else:
             return repr(self.__func)
+
+
+TRUE = BooleanFunc(lambda *args, **kwargs: True, str='True')
+FALSE = BooleanFunc(lambda *args, **kwargs: False, str='False')
