@@ -12,7 +12,7 @@ setup(
 
     version=VERSION,
 
-    python_requires='>=3.4',
+    python_requires='>=3.6',
 
     packages=find_packages(),
 
@@ -55,9 +55,9 @@ setup(
 
         'License :: OSI Approved :: MIT License',
 
-        'Programming Language :: Python :: 3.4',
-        'Programming Language :: Python :: 3.5',
+        'Programming Language :: Python :: 3',
         'Programming Language :: Python :: 3.6',
+        'Programming Language :: Python :: 3.7',
 
         'Topic :: Terminals',
         'Topic :: Utilities',

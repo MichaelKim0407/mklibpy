@@ -1,4 +1,4 @@
-from sys import version_info, stderr
+from sys import stderr
 
 import os
 
@@ -35,13 +35,7 @@ def test_mklibpy():
         exit(1)
 
 
-def bin_supports_version():
-    return version_info.major > 2
-
-
 def test_mklibpy_bin():
-    if not bin_supports_version():
-        return
     cd('mklibpy-bin')
     ret = test()
     if not success(ret):
