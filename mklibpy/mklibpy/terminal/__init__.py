@@ -1,8 +1,12 @@
 import os as _os
 
-from . import colored_text
-from . import interact
-from .. import util as _util
+from . import (
+    colored_text,
+    interact,
+)
+from .. import (
+    util as _util,
+)
 
 __author__ = 'Michael'
 

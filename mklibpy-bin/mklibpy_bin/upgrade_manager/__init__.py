@@ -1,7 +1,7 @@
+import os
 import sys
 import time
 
-import os
 from mklibpy.util.path import ensure_dir
 
 __author__ = 'Michael'

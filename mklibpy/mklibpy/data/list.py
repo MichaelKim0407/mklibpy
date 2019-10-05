@@ -1,5 +1,7 @@
-from . import column as _column
-from . import obj as _obj
+from . import (
+    column as _column,
+    obj as _obj,
+)
 
 __author__ = 'Michael'
 

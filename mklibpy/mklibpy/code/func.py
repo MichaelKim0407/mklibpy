@@ -1,4 +1,6 @@
-from . import types as _types
+from . import (
+    types as _types,
+)
 
 __author__ = 'Michael'
 

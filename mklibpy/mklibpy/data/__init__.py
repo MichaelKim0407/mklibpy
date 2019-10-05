@@ -1,8 +1,12 @@
-from . import column
-from . import config
-from . import list
-from . import obj
-from .. import util as _util
+from . import (
+    column,
+    config,
+    list,
+    obj,
+)
+from .. import (
+    util as _util,
+)
 
 __author__ = 'Michael'
 

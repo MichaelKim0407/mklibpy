@@ -1,4 +1,6 @@
-from cached_property import cached_property as _cached_property
+from cached_property import (
+    cached_property,
+)
 
 __author__ = 'Michael'
 
@@ -52,7 +54,7 @@ class AttributesOf(object):
                 return False
         return True
 
-    @_cached_property
+    @cached_property
     def self_attrs(self):
         result = {}
         for name in self.obj.__dict__:
@@ -62,7 +64,7 @@ class AttributesOf(object):
             result[name] = attr
         return result
 
-    @_cached_property
+    @cached_property
     def attrs(self):
         result = {}
         for name in dir(self.obj):

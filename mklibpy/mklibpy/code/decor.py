@@ -1,5 +1,7 @@
-from . import attrs as _attrs
-from . import types as _types
+from . import (
+    attrs as _attrs,
+    types as _types,
+)
 
 __author__ = 'Michael'
 

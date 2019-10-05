@@ -1,8 +1,12 @@
 import math as _math
 
-from . import collection as _collection
-from .. import error as _error
-from .. import util as _util
+from . import (
+    collection as _collection,
+)
+from .. import (
+    error as _error,
+    util as _util,
+)
 
 __author__ = 'Michael'
 

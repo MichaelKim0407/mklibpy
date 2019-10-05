@@ -1,6 +1,8 @@
-from . import args
-from . import collection
-from . import osinfo
-from . import path
+from . import (
+    args,
+    collection,
+    osinfo,
+    path,
+)
 
 __author__ = 'Michael'

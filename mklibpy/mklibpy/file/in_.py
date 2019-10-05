@@ -1,5 +1,9 @@
-from .. import util as _util
-from ..common import collection as _collection
+from .. import (
+    util as _util,
+)
+from ..common import (
+    collection as _collection,
+)
 
 __author__ = 'Michael'
 

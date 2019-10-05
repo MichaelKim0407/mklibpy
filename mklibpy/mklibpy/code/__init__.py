@@ -1,6 +1,8 @@
-from . import attrs
-from . import decor
-from . import func
-from . import types
+from . import (
+    attrs,
+    decor,
+    func,
+    types,
+)
 
 __author__ = 'Michael'

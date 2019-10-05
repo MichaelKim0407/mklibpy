@@ -1,5 +1,7 @@
-from . import list as _list
-from . import obj as _obj
+from . import (
+    list as _list,
+    obj as _obj,
+)
 
 __author__ = 'Michael'
 

@@ -1,7 +1,7 @@
-import sys
-
 import os
 import subprocess
+import sys
+
 from cached_property import cached_property
 
 try:

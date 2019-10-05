@@ -1,6 +1,5 @@
-import sys as _sys
-
 import platform as _platform
+import sys as _sys
 
 __author__ = 'Michael'
 

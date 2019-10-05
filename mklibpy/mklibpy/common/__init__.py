@@ -1,5 +1,7 @@
-from . import collection
-from . import string
-from . import vector
+from . import (
+    collection,
+    string,
+    vector,
+)
 
 __author__ = 'Michael'

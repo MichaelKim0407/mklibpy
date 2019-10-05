@@ -1,4 +1,6 @@
-from . import AbstractBooleanFunc as _Abs
+from . import (
+    AbstractBooleanFunc as _Abs,
+)
 
 __author__ = 'Michael'
 

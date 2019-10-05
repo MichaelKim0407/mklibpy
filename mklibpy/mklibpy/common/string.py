@@ -1,4 +1,6 @@
-from . import collection as _collection
+from . import (
+    collection as _collection,
+)
 
 __author__ = 'Michael'
 
