@@ -5,6 +5,9 @@
 __pycache__/
 *.py[cod]
 
+# Venv
+.venv/
+
 # Pip
 dist/
 *.egg-info/
