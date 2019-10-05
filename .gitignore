@@ -15,6 +15,7 @@ dist/
 # PyTest
 .eggs/
 .pytest_cache/
+.coverage
 
 # Mac
 .DS_Store

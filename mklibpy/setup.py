@@ -1,24 +1,46 @@
-import os
-
+from mklibpy import __version__
 from setuptools import setup, find_packages
 
-root_dir = os.path.abspath(os.path.dirname(__file__))
+extra_django = [
+    'django>=1.10,<2',
+]
+extra_django_all = [
+    *extra_django,
+    'django-markdownx',
+]
 
-with open(os.path.join(root_dir, 'VERSION')) as f:
-    VERSION = f.read().rstrip()
+extra_tornado = [
+    'tornado==4.*',
+]
 
-extra_django = ['django>=1.10,<2']
-extra_django_more = ['django-markdownx']
-extra_django_all = extra_django + extra_django_more
+extra_all = [
+    *extra_django_all,
+    *extra_tornado,
+]
 
-extra_tornado = ['tornado==4.*']
+extra_test = [
+    'pytest>=4',
+    'pytest-cov>=2',
+]
+extra_dev = [
+    *extra_all,
+    *extra_test,
+]
 
-extra_all = extra_django_all + extra_tornado
+extra_ci = [
+    *extra_test,
+]
 
 setup(
     name='mklibpy',
+    version=__version__,
+    description='Python library created by Michael Kim',
 
-    version=VERSION,
+    url='https://github.com/MichaelKim0407/mklibpy',
+    author='Michael Kim',
+    author_email='mkim0407@gmail.com',
+
+    license='MIT',
 
     python_requires='>=3.6',
 
@@ -27,30 +49,20 @@ setup(
     ],
 
     extras_require={
-        'all': extra_all,
-        'tornado': extra_tornado,
         'django': extra_django,
         'django-all': extra_django_all,
+
+        'tornado': extra_tornado,
+
+        'all': extra_all,
+
+        'test': extra_test,
+        'dev': extra_dev,
+
+        'ci': extra_ci,
     },
 
-    setup_requires=[
-        'pytest-runner',
-    ],
-    tests_require=[
-        'pytest',
-    ],
-
     packages=find_packages(),
-
-    url='https://github.com/MichaelKim0407/mklibpy',
-
-    license='MIT',
-
-    author='Michael Kim',
-
-    author_email='mkim0407@gmail.com',
-
-    description='Python library created by Michael Kim',
 
     classifiers=[
         'Development Status :: 2 - Pre-Alpha',

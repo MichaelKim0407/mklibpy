@@ -1,6 +1,14 @@
 language: python
+
 python:
   - "3.6"
 
+cache: pip
+
+install:
+  - pip install -U pip setuptools
+  - cd mklibpy
+  - pip install -e .[ci]
+
 script:
-  - python travis/script.py
+  - pytest

@@ -1,23 +1,23 @@
-import os
-
+from mklibpy_bin import __version__, mklibpy_requires
 from setuptools import setup, find_packages
-
-root_dir = os.path.abspath(os.path.dirname(__file__))
-
-with open(os.path.join(root_dir, 'VERSION')) as f:
-    VERSION, BASE_VERSION = [line.rstrip() for line in f]
 
 setup(
     name='mklibpy-bin',
+    version=__version__,
+    description='Command line executables for mklibpy',
 
-    version=VERSION,
+    url='https://github.com/MichaelKim0407/mklibpy',
+    author='Michael Kim',
+    author_email='mkim0407@gmail.com',
+
+    license='MIT',
 
     python_requires='>=3.6',
 
     packages=find_packages(),
 
     install_requires=[
-        'mklibpy>={}'.format(BASE_VERSION),
+        'mklibpy>={}'.format(mklibpy_requires),
         'cached-property',
     ],
 
@@ -30,23 +30,6 @@ setup(
             'upgrade=mklibpy_bin.upgrade_manager:main',
         ],
     },
-
-    setup_requires=[
-        'pytest-runner',
-    ],
-    tests_require=[
-        'pytest',
-    ],
-
-    url='https://github.com/MichaelKim0407/mklibpy',
-
-    license='MIT',
-
-    author='Michael Kim',
-
-    author_email='mkim0407@gmail.com',
-
-    description='Command line executables for mklibpy',
 
     classifiers=[
         'Development Status :: 1 - Planning',
