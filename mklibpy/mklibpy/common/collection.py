@@ -320,7 +320,8 @@ class SequenceDict(object):
 
     def sort_by_value(self, key=None, reverse=False):
         if key is not None:
-            key = lambda x: key(self[x])
+            def key(x):
+                return key(self[x])
         self._keys.sort(key=key, reverse=reverse)
 
     def values(self):
@@ -416,16 +417,16 @@ class AnyCollection(object):
             return StandardList(objects)
         try:
             return cls.DEFAULT_LIST_TYPE(objects)
-        except:
+        except Exception:
             return cls.__base__._make_list(objects)
 
     def __make_list(self, objects, li_cls):
         try:
             return li_cls(objects)
-        except:
+        except Exception:
             try:
                 return self.__li_cls(objects)
-            except:
+            except Exception:
                 return self._make_list(objects)
 
     def __iter__(self):
@@ -450,7 +451,7 @@ class AnyCollection(object):
             return AnyCollection(*args, **kwargs)
         try:
             return cls(*args, **kwargs)
-        except:
+        except Exception:
             return cls.__base__._make_collection(*args, **kwargs)
 
     def __getattribute(self, name):

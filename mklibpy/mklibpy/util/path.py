@@ -52,9 +52,11 @@ def ensure_dir(path):
 
 def recursive(filter=None, dir_filter=None):
     if filter is None:
-        filter = lambda x: True
+        def filter(x):
+            return True
     if dir_filter is None:
-        dir_filter = lambda x: True
+        def dir_filter(x):
+            return True
 
     def __decor(func):
         def __new_func(path):

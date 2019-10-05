@@ -1,6 +1,6 @@
 import os as _os
 
-from . import (
+from . import (  # noqa: F401
     colored_text,
     interact,
 )

@@ -20,7 +20,7 @@ class Manager(object):
         raise NotImplementedError
 
 
-from .managers import builtins
+from .managers import builtins  # noqa: E402
 
 
 def get_base_dir():

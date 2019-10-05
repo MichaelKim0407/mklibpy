@@ -1,6 +1,16 @@
 from collections import defaultdict
 
-from mklibpy.code.types import *
+from mklibpy.code.types import (
+    TypeOf,
+    IsExactType,
+    IsInstance,
+    is_function,
+    is_class,
+    is_unbound_method,
+    is_bound_method,
+    is_staticmethod,
+    is_classmethod,
+)
 
 __author__ = 'Michael'
 

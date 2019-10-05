@@ -22,7 +22,7 @@ MODES = {
     9: "strike"
 }
 
-__switch_reg = _re.compile('\033\[[0-9;]*m')
+__switch_reg = _re.compile(r'\033\[[0-9;]*m')
 
 
 def get_color_code(color):

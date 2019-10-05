@@ -12,3 +12,5 @@ install:
 
 script:
   - pytest
+  - cd ..
+  - flake8 .

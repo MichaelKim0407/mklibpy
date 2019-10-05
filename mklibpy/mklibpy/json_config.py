@@ -9,7 +9,7 @@ def format_config(config, make_copy=False, **kwargs):
         config = _copy.deepcopy(config)
 
     def is_str(_val):
-        return isinstance(_val, str) or isinstance(_val, unicode)
+        return isinstance(_val, str) or isinstance(_val, unicode)  # noqa: F821  TODO python2
 
     def format_str(format_string, recursion_depth=2):
         # see: string.Formatter.vformat

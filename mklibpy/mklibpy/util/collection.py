@@ -149,10 +149,13 @@ def format_dict(
                 "r" if r_key else "s",
                 key_width
             )
-        key_formatter = lambda key: key_format.format(key)
+
+        def key_formatter(key):
+            return key_format.format(key)
 
     if val_formatter is None:
-        val_formatter = lambda val: repr(val) if r_val else str(val)
+        def val_formatter(val):
+            return repr(val) if r_val else str(val)
 
     def __formatter(key):
         return key_formatter(key) + k_v + val_formatter(d[key])

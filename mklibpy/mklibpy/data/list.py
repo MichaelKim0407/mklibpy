@@ -21,7 +21,8 @@ class DataList(list):
 
     def column(self, name, method=None):
         if method is None:
-            method = lambda x: x[name]
+            def method(x):
+                return x[name]
         col = [method(item) for item in self]
         return _column.Column(name, col)
 

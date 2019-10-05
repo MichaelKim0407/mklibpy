@@ -43,7 +43,7 @@ class MultiWriter(object):
             # we must ensure that all files are closed.
             try:
                 self.__writers[name].close()
-            except:
+            except Exception:
                 if self.logger is not None:
                     self.logger.warn("File \'{}\' failed to close".format(name))
 

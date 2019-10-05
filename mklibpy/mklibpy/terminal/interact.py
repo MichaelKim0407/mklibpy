@@ -5,7 +5,7 @@ from .. import (
 __author__ = 'Michael'
 
 if _util.osinfo.PYTHON2:
-    user_input = raw_input
+    user_input = raw_input  # noqa: F821  TODO python2
 else:
     user_input = input
 
@@ -23,7 +23,7 @@ if _util.osinfo.WINDOWS:
     import msvcrt as _msvcrt
 
 
-    def getch():
+    def getch():  # noqa: E303
         """
         Get a single key from user input. Do not wait for Enter.
 
@@ -34,10 +34,12 @@ if _util.osinfo.WINDOWS:
         """
         return _msvcrt.getch()
 else:
-    import sys as _sys, tty as _tty, termios as _termios
+    import sys as _sys
+    import tty as _tty
+    import termios as _termios
 
 
-    def getch():
+    def getch():  # noqa: E303
         """
         Get a single key from user input. Do not wait for Enter.
 
@@ -59,7 +61,7 @@ if _util.osinfo.LINUX:
     import readline as _readline
 
 
-    class TabAutoComplete(object):
+    class TabAutoComplete(object):  # noqa: E303
         Bound = False
 
         def __init__(self, *strings):

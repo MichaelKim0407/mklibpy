@@ -21,6 +21,8 @@ extra_all = [
 extra_test = [
     'pytest>=4',
     'pytest-cov>=2',
+
+    'flake8',
 ]
 extra_dev = [
     *extra_all,
@@ -76,5 +78,5 @@ setup(
         'Programming Language :: Python :: 3.7',
 
         'Topic :: Software Development :: Libraries',
-    ]
+    ],
 )

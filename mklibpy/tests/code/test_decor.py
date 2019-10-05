@@ -1,5 +1,11 @@
 import mklibpy.code.types as types
-from mklibpy.code.decor import *
+from mklibpy.code.decor import (
+    as_is,
+    class_decorator,
+    filter_not_special,
+    multipurpose_decorator,
+    with_params,
+)
 
 __author__ = 'Michael'
 

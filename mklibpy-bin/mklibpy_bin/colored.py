@@ -1,4 +1,8 @@
-from mklibpy.terminal.colored_text import *
+from mklibpy.terminal.colored_text import (
+    get_text,
+    COLORS,
+    MODES,
+)
 from mklibpy.util.collection import format_dict
 
 __author__ = 'Michael'
@@ -51,7 +55,7 @@ def run(args):
                 args = args[2:]
                 try:
                     color = int(color)
-                except:
+                except Exception:
                     pass
             else:
                 color = None
@@ -60,7 +64,7 @@ def run(args):
                 args = args[2:]
                 try:
                     mode = int(mode)
-                except:
+                except Exception:
                     pass
             else:
                 mode = None
@@ -69,7 +73,7 @@ def run(args):
             except Exception as e:
                 print(e)
                 exit(1)
-    except:
+    except Exception:
         print_help()
         exit(2)
     else:

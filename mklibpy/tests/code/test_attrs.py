@@ -59,5 +59,4 @@ def test_inherit():
 
 def test_extend():
     c = C2()
-    assert AttributesOf(c, name_startswith='f').attrs == \
-           AttributesOf(c).filter(name_startswith='f').attrs
+    assert AttributesOf(c, name_startswith='f').attrs == AttributesOf(c).filter(name_startswith='f').attrs
