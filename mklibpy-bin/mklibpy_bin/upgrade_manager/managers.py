@@ -1,6 +1,7 @@
 import re
 import subprocess
-from cached_property import timed_cached_property
+
+from cached_property import cached_property, timed_cached_property
 
 from . import Manager
 
@@ -14,10 +15,14 @@ class AptManager(Manager):
     def __init__(self, apt='apt'):
         self.apt = apt
 
+    @cached_property
+    def _update_cmd(self):
+        return [self.apt, 'update']
+
     @timed_cached_property(ttl=60)
     def _update(self):
         return subprocess.check_output(
-            [self.apt, 'update'],
+            self._update_cmd,
             stderr=subprocess.DEVNULL
         ).decode()
 
@@ -30,16 +35,24 @@ class AptManager(Manager):
             return 0
         return int(self.CHECK_REGEX.findall(out)[0])
 
+    @cached_property
+    def _list_cmd(self):
+        return [self.apt, 'list', '--upgradable']
+
     def list(self):
         self.update()
         subprocess.check_call(
-            [self.apt, 'list', '--upgradable']
+            self._list_cmd
         )
+
+    @cached_property
+    def _upgrade_cmd(self):
+        return [self.apt, 'upgrade', '-y']
 
     def run(self):
         self.update()
         subprocess.check_call(
-            [self.apt, 'upgrade', '-y']
+            self._upgrade_cmd
         )
 
 
@@ -47,33 +60,45 @@ class BrewManager(Manager):
     def __init__(self, brew='brew'):
         self.brew = brew
 
+    @cached_property
+    def _update_cmd(self):
+        return [self.brew, 'update']
+
     @timed_cached_property(ttl=60)
     def _update(self):
         subprocess.check_call(
-            [self.brew, 'update'],
+            self._update_cmd,
             stdout=subprocess.DEVNULL
         )
 
     def update(self):
         return self._update
 
+    @cached_property
+    def _list_cmd(self):
+        return [self.brew, 'outdated']
+
     def check(self):
         self.update()
         out = subprocess.check_output(
-            [self.brew, 'outdated']
+            self._list_cmd
         ).decode()
         return len(out.splitlines())
 
     def list(self):
         self.update()
         subprocess.check_call(
-            [self.brew, 'outdated']
+            self._list_cmd
         )
+
+    @cached_property
+    def _upgrade_cmd(self):
+        return [self.brew, 'upgrade']
 
     def run(self):
         self.update()
         subprocess.check_call(
-            [self.brew, 'upgrade']
+            self._upgrade_cmd
         )
 
 
@@ -83,24 +108,13 @@ class CaskManager(BrewManager):
         self.cask = cask
         self.greedy = greedy
 
-    def check(self):
-        self.update()
-        out = subprocess.check_output(
-            [self.brew, self.cask, 'outdated'] + (['--greedy'] if self.greedy else [])
-        ).decode()
-        return len(out.splitlines())
+    @cached_property
+    def _list_cmd(self):
+        return [self.brew, self.cask, 'outdated'] + (['--greedy'] if self.greedy else [])
 
-    def list(self):
-        self.update()
-        subprocess.check_call(
-            [self.brew, self.cask, 'outdated'] + (['--greedy'] if self.greedy else [])
-        )
-
-    def run(self):
-        self.update()
-        subprocess.check_call(
-            [self.brew, self.cask, 'upgrade'] + (['--greedy'] if self.greedy else [])
-        )
+    @cached_property
+    def _upgrade_cmd(self):
+        return [self.brew, self.cask, 'upgrade'] + (['--greedy'] if self.greedy else [])
 
 
 class PipManager(Manager):
@@ -111,9 +125,13 @@ class PipManager(Manager):
     def check(self):
         return len(self.pip.outdated)
 
+    @cached_property
+    def _list_cmd(self):
+        return [self.pip.path, 'list', '--outdated']
+
     def list(self):
         subprocess.call(
-            [self.pip.path, 'list', '--outdated']
+            self._list_cmd
         )
 
     def run(self):

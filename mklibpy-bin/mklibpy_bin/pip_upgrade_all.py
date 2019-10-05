@@ -1,6 +1,6 @@
+import subprocess
 import sys
 
-import subprocess
 from cached_property import cached_property, timed_cached_property
 
 __author__ = 'Michael'
@@ -33,10 +33,14 @@ class Pip(object):
         self.path = path
 
     @cached_property
+    def _version_cmd(self):
+        return [self.path, "--version"]
+
+    @cached_property
     def version_major(self):
         try:
             out = subprocess.check_output(
-                [self.path, "--version"],
+                self._version_cmd,
                 stderr=subprocess.DEVNULL
             ).decode()
         except (FileNotFoundError, subprocess.CalledProcessError):
@@ -45,24 +49,35 @@ class Pip(object):
         major = int(version.split(".")[0])
         return major
 
+    @cached_property
+    def _list_fmt(self):
+        if self.version_major > 10:
+            # the legacy format has been deprecated as of pip 18
+            cmd = ['--format=freeze']
+            fmt = 'freeze'
+        elif self.version_major >= 9:
+            cmd = ['--format=legacy']
+            fmt = 'legacy'
+        else:
+            cmd = []
+            fmt = 'legacy'
+
+        return fmt, cmd
+
+    @property
+    def list_fmt(self):
+        return self._list_fmt[0]
+
+    @cached_property
+    def _list_cmd(self):
+        return [self.path, "list", "--outdated"] + self._list_fmt[1]
+
     @timed_cached_property(ttl=60)
     def outdated(self):
         def __yield():
             try:
-                cmd = [self.path, "list", "--outdated"]
-
-                if self.version_major > 10:
-                    # the legacy format has been deprecated as of pip 18
-                    cmd += ['--format=freeze']
-                    fmt = 'freeze'
-                elif self.version_major >= 9:
-                    cmd += ['--format=legacy']
-                    fmt = 'legacy'
-                else:
-                    fmt = 'legacy'
-
                 out = subprocess.check_output(
-                    cmd,
+                    self._list_cmd,
                     stderr=subprocess.DEVNULL
                 ).decode()
             except subprocess.CalledProcessError:
@@ -72,12 +87,12 @@ class Pip(object):
                 if not line:
                     continue
 
-                if fmt == 'freeze':
+                if self.list_fmt == 'freeze':
                     name = line.split('==')[0]
-                elif fmt == 'legacy':
+                elif self.list_fmt == 'legacy':
                     name = line.split()[0]
                 else:
-                    raise ValueError(fmt)
+                    raise ValueError(self.list_fmt)
 
                 yield name
 
