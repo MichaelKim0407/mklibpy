@@ -166,7 +166,7 @@ class LsGitProcess(object):
         return 'l' in self.__flags
 
     @cached_property
-    def __color(self):
+    def _color(self):
         if self.__parent.is_gnu:
             if not self.__options.startswith('--color'):
                 return False
@@ -183,7 +183,7 @@ class LsGitProcess(object):
             return 'G' in self.__flags
 
     def color(self, text, color=None, mode=None):
-        if not self.__color:
+        if not self._color:
             return text
         return get_text(text, color=color, mode=mode)
 
@@ -197,7 +197,7 @@ class LsGitProcess(object):
             return line
 
         dir = sp[8]
-        if self.__color:
+        if self._color:
             dir = remove_switch(dir)
 
         dir = dir.rstrip('/@')
@@ -232,7 +232,7 @@ class LsGitProcess(object):
             # See Issue #3
             lines = self.__system_call()
             workaround_flag = True
-        elif not self.__color:
+        elif not self._color:
             lines = self.__system_call()
             workaround_flag = False
         else:

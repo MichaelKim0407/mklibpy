@@ -15,14 +15,14 @@ class AptManager(Manager):
         self.apt = apt
 
     @timed_cached_property(ttl=60)
-    def __update(self):
+    def _update(self):
         return subprocess.check_output(
             [self.apt, 'update'],
             stderr=subprocess.DEVNULL
         ).decode()
 
     def update(self):
-        return self.__update
+        return self._update
 
     def check(self):
         out = self.update()
@@ -48,14 +48,14 @@ class BrewManager(Manager):
         self.brew = brew
 
     @timed_cached_property(ttl=60)
-    def __update(self):
+    def _update(self):
         subprocess.check_call(
             [self.brew, 'update'],
             stdout=subprocess.DEVNULL
         )
 
     def update(self):
-        return self.__update
+        return self._update
 
     def check(self):
         self.update()
