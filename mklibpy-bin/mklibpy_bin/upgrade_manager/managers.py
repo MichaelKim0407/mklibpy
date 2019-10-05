@@ -78,27 +78,28 @@ class BrewManager(Manager):
 
 
 class CaskManager(BrewManager):
-    def __init__(self, brew='brew', cask='cask'):
+    def __init__(self, brew='brew', cask='cask', greedy=True):
         super().__init__(brew)
         self.cask = cask
+        self.greedy = greedy
 
     def check(self):
         self.update()
         out = subprocess.check_output(
-            [self.brew, self.cask, 'outdated']
+            [self.brew, self.cask, 'outdated'] + (['--greedy'] if self.greedy else [])
         ).decode()
         return len(out.splitlines())
 
     def list(self):
         self.update()
         subprocess.check_call(
-            [self.brew, self.cask, 'outdated']
+            [self.brew, self.cask, 'outdated'] + (['--greedy'] if self.greedy else [])
         )
 
     def run(self):
         self.update()
         subprocess.check_call(
-            [self.brew, self.cask, 'upgrade']
+            [self.brew, self.cask, 'upgrade'] + (['--greedy'] if self.greedy else [])
         )
 
 
